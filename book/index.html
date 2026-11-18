@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ماريا — حجز عالمي برسوم 3% فقط</title>
+<style>
+:root{
+  --bg:#060a12;--panel:rgba(255,255,255,.045);--panel2:rgba(255,255,255,.08);
+  --line:rgba(255,255,255,.10);--text:#eaf0ff;--muted:#8f9dbb;
+  --mint:#39e6c3;--violet:#7b6cff;--gold:#ffc36b;--pink:#ff6fa5;
+  --grad:linear-gradient(135deg,#39e6c3,#6d8bff 55%,#a06bff);
+  --font:"Segoe UI","Noto Kufi Arabic",Tahoma,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:
+  radial-gradient(820px 480px at 90% -8%,rgba(123,108,255,.24),transparent 62%),
+  radial-gradient(700px 420px at 4% 2%,rgba(57,230,195,.15),transparent 60%),
+  linear-gradient(180deg,#060a12,#070c16 45%,#05080f)}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1240px,94vw);margin-inline:auto}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(6,10,18,.82);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07)}
+.topbar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px}
+.brand small{display:block;font-size:9.5px;letter-spacing:2px;color:var(--muted);font-weight:700;line-height:1}
+.tb-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.badge{font-size:10.5px;font-weight:800;padding:5px 11px;border-radius:999px;background:rgba(57,230,195,.14);border:1px solid rgba(57,230,195,.35);color:var(--mint)}
+.badge.code{background:rgba(123,108,255,.16);border-color:rgba(123,108,255,.35);color:#c3b8ff;font-family:ui-monospace,monospace}
+.badge.warn{background:rgba(255,195,107,.14);border-color:rgba(255,195,107,.35);color:var(--gold)}
+.hero{padding:24px 0 8px}
+.hero h1{font-size:clamp(21px,2.7vw,31px);letter-spacing:-.9px;font-weight:800;margin-bottom:3px}
+.hero p{color:var(--muted);font-size:13px;font-weight:600}
+.vtabs{display:flex;gap:7px;overflow-x:auto;padding:15px 0 11px;scrollbar-width:none}
+.vtabs::-webkit-scrollbar{display:none}
+.vtab{display:flex;align-items:center;gap:7px;font-family:inherit;font-size:12.8px;font-weight:800;color:#b8c4e0;background:var(--panel);border:1px solid var(--line);padding:9px 14px;border-radius:13px;cursor:pointer;white-space:nowrap;transition:.2s}
+.vtab:hover{background:var(--panel2);transform:translateY(-2px)}
+.vtab.on{background:linear-gradient(135deg,rgba(57,230,195,.22),rgba(160,107,255,.28));border-color:rgba(123,108,255,.55);color:#fff}
+.searchbox{padding:15px;border-radius:20px;background:linear-gradient(160deg,rgba(20,27,45,.92),rgba(10,15,26,.94));border:1px solid var(--line);box-shadow:0 24px 60px -28px rgba(0,0,0,.9)}
+.sgrid{display:grid;grid-template-columns:1.2fr 1.2fr 1fr 1fr auto;gap:10px}
+.field{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:13px;padding:8px 12px}
+.field label{display:block;font-size:10.5px;font-weight:800;color:var(--muted)}
+.field input{width:100%;background:none;border:none;outline:none;color:var(--text);font-family:inherit;font-size:13.5px;font-weight:700}
+.btnsearch{align-self:stretch;padding:0 26px;border:none;border-radius:13px;background:var(--grad);color:#04121a;font-family:inherit;font-weight:900;font-size:14px;cursor:pointer;transition:.2s}
+.btnsearch:hover{transform:translateY(-2px)}
+.adapter{margin-top:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11.3px;color:var(--muted);font-weight:700}
+.adapter code{background:rgba(123,108,255,.16);border:1px solid rgba(123,108,255,.32);color:#c8bcff;padding:2px 8px;border-radius:7px;font-size:10.5px;font-family:ui-monospace,monospace}
+.adapter b{color:#dfe8ff}
+.main{display:grid;grid-template-columns:1fr 330px;gap:20px;padding:18px 0 50px;align-items:start}
+.results{display:flex;flex-direction:column;gap:11px}
+.offer{display:grid;grid-template-columns:60px 1fr auto;gap:14px;align-items:center;padding:14px;border-radius:17px;background:var(--panel);border:1px solid var(--line);transition:.24s;animation:pop .32s ease both}
+.offer:hover{background:var(--panel2);border-color:rgba(57,230,195,.4);transform:translateY(-3px)}
+.oflogo{width:60px;height:60px;border-radius:15px;display:grid;place-items:center;font-size:23px;background:linear-gradient(160deg,rgba(57,230,195,.16),rgba(160,107,255,.18));border:1px solid rgba(255,255,255,.1)}
+.ofmain b{font-size:14.3px;display:block;margin-bottom:2px}
+.ofmain .route{font-size:12.3px;color:#b6c3e0;font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.chips span{font-size:10.3px;font-weight:700;color:#a9b6d4;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);padding:2px 8px;border-radius:7px}
+.ofside{text-align:end;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.price{font-size:18px;font-weight:900;letter-spacing:-.6px}
+.price small{display:block;font-size:10px;color:var(--muted);font-weight:700}
+.fee{font-size:10.4px;font-weight:800;color:var(--gold);background:rgba(255,195,107,.12);border:1px solid rgba(255,195,107,.3);padding:2px 8px;border-radius:999px;white-space:nowrap}
+.bookbtn{font-family:inherit;font-size:12px;font-weight:900;padding:7px 15px;border-radius:10px;border:none;background:var(--grad);color:#04121a;cursor:pointer}
+.bookbtn:hover{filter:brightness(1.08)}
+.side{position:sticky;top:74px;display:flex;flex-direction:column;gap:13px}
+.card{padding:16px;border-radius:18px;background:var(--panel);border:1px solid var(--line)}
+.card.hl{background:linear-gradient(160deg,rgba(57,230,195,.13),rgba(123,108,255,.18));border-color:rgba(255,255,255,.16)}
+.card h4{font-size:12.5px;font-weight:800;margin-bottom:9px;display:flex;justify-content:space-between;align-items:center}
+.card h4 em{font-style:normal;font-size:10px;color:var(--mint);background:rgba(57,230,195,.12);padding:2px 8px;border-radius:999px;border:1px solid rgba(57,230,195,.28)}
+.big{font-size:clamp(22px,2.6vw,29px);font-weight:900;letter-spacing:-1px;line-height:1.25}
+.row{display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;color:#c1cde8;padding:6px 0;border-bottom:1px dashed rgba(255,255,255,.1)}
+.row:last-child{border:none}
+.row b{color:#fff}
+.row.mint b{color:var(--mint)}
+.empty{font-size:11.5px;color:var(--muted);text-align:center;padding:12px 0;font-weight:700}
+.overlay{position:fixed;inset:0;z-index:100;background:rgba(3,6,12,.78);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:18px}
+.overlay.on{display:flex}
+.modal{width:min(520px,100%);max-height:92vh;overflow:auto;border-radius:22px;background:linear-gradient(165deg,#101728,#080d18);border:1px solid rgba(255,255,255,.14);box-shadow:0 40px 90px -30px #000;animation:pop .3s ease both}
+.modal-head{padding:15px 19px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;font-size:14.5px}
+.x{background:rgba(255,255,255,.07);border:1px solid var(--line);color:#fff;width:31px;height:31px;border-radius:9px;cursor:pointer;font-family:inherit}
+.modal-body{padding:17px 19px}
+.mline{display:flex;justify-content:space-between;gap:10px;font-size:12.8px;padding:6px 0;color:#c3cfe9;font-weight:600}
+.mline b{color:#fff;font-weight:900}
+.mline.total{border-top:1px dashed rgba(255,255,255,.16);margin-top:5px;padding-top:11px;font-size:14px}
+.mline.mint,.mline.mint b{color:var(--mint)}
+.sep{margin:11px 0 4px;font-size:11px;font-weight:900;color:var(--muted);letter-spacing:.5px}
+.spectrum{height:30px;border-radius:9px;overflow:hidden;display:flex;margin:12px 0 5px;border:1px solid rgba(255,255,255,.14);font-size:10px;font-weight:900}
+.spectrum .a{background:linear-gradient(135deg,#39e6c3,#6fd3ff);color:#04121a;display:grid;place-items:center}
+.spectrum .b{background:rgba(255,255,255,.1);color:#cfdaf5;display:grid;place-items:center}
+.confirm{width:100%;padding:13px;border:none;border-radius:13px;background:var(--grad);color:#04121a;font-family:inherit;font-weight:900;font-size:14px;cursor:pointer;margin-top:12px}
+.modal-note{font-size:10.5px;color:var(--muted);margin-top:9px;line-height:1.8;text-align:center}
+.sent{padding:24px 19px;text-align:center}
+.tick{width:56px;height:56px;border-radius:50%;background:rgba(57,230,195,.16);border:1px solid rgba(57,230,195,.45);display:grid;place-items:center;font-size:25px;margin:0 auto 13px;color:var(--mint)}
+.ref{display:inline-block;margin-top:11px;font-family:ui-monospace,monospace;font-size:12px;background:rgba(255,255,255,.07);border:1px solid var(--line);padding:5px 12px;border-radius:9px;color:#dfe8ff}
+.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;padding-bottom:36px}
+.strip div{padding:14px;border-radius:15px;background:var(--panel);border:1px solid var(--line);font-size:11.5px;color:#b3c0dd;font-weight:600}
+.strip b{display:block;color:#fff;font-size:13px;margin-bottom:3px}
+@keyframes pop{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+@media(max-width:1020px){.main{grid-template-columns:1fr}.side{position:static}.sgrid{grid-template-columns:1fr 1fr}.btnsearch{padding:14px;grid-column:1/-1}.strip{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.sgrid{grid-template-columns:1fr}.offer{grid-template-columns:46px 1fr}.oflogo{width:46px;height:46px;font-size:18px}.ofside{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center;gap:8px}.strip{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="/">
+      <svg width="33" height="33" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <defs><linearGradient id="g1" x1="0" y1="0" x2="48" y2="48"><stop offset="0" stop-color="#39e6c3"/><stop offset=".55" stop-color="#6d8bff"/><stop offset="1" stop-color="#a06bff"/></linearGradient></defs>
+        <rect x="1.5" y="1.5" width="45" height="45" rx="14" fill="url(#g1)" opacity=".16" stroke="url(#g1)" stroke-width="2"/>
+        <path d="M14 30.5c0-6.2 4.6-10.5 10.4-10.5 5.6 0 9.6 4 9.6 9.4 0 5-3.7 8.6-8.6 8.6h-5.1l-4.3 3.2v-4.2c-1.3-1.6-2-3.9-2-6.5Z" fill="url(#g1)"/>
+        <path d="M24 20.5l1.9 4.6 4.6 1.9-4.6 1.9-1.9 4.6-1.9-4.6-4.6-1.9 4.6-1.9 1.9-4.6Z" fill="#fff"/>
+      </svg>
+      <span>ماريا<span style="font-weight:700"> — الحجز العالمي</span><small>3% MODEL · GLOBAL BOOKING</small></span>
+    </a>
+    <div class="tb-right">
+      <span class="badge" id="modeBadge">● جارٍ الاتصال…</span>
+      <span class="badge code" id="refBadge" style="display:none"></span>
+      <a class="badge warn" href="/dashboard" style="text-decoration:none">لوحة الشركاء ↗</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap hero">
+  <h1>رسوم <span class="grad-text">3% فقط</span> على كل حجز في العالم</h1>
+  <p>السعر الحقيقي للمزوّد + 3% شفافة تراها قبل الدفع — بلا رسوم خفية وبلا مفاجآت.</p>
+  <div class="vtabs" id="vtabs"></div>
+  <div class="searchbox">
+    <div class="sgrid">
+      <div class="field"><label id="lb1">من</label><input id="f1" value="الجزائر (ALG)" /></div>
+      <div class="field"><label id="lb2">إلى</label><input id="f2" value="باريس (CDG)" /></div>
+      <div class="field"><label id="lb3">المغادرة</label><input id="f3" type="date" value="2026-11-12" /></div>
+      <div class="field"><label id="lb4">العودة / الليالي</label><input id="f4" value="2026-11-19" /></div>
+      <button class="btnsearch" id="doSearch">ابحث</button>
+    </div>
+    <div class="adapter" id="adapterBar"></div>
+  </div>
+</div>
+
+<div class="wrap main">
+  <div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px;flex-wrap:wrap;gap:8px">
+      <b id="resTitle" style="font-size:14px">أفضل النتائج</b>
+      <select id="sortsel" style="background:var(--panel);border:1px solid var(--line);color:var(--text);font-family:inherit;font-size:12px;font-weight:800;padding:7px 11px;border-radius:10px;cursor:pointer">
+        <option value="best">الأفضل توازنًا</option>
+        <option value="cheap">الأرخص</option>
+        <option value="comm">أعلى ربح للمنصة</option>
+      </select>
+    </div>
+    <div class="results" id="results"></div>
+  </div>
+
+  <aside class="side">
+    <div class="card hl">
+      <h4>حصيلة هذه الجلسة <em>مباشرة من الخادم</em></h4>
+      <div class="big grad-text" id="wNet">0 $</div>
+      <div class="row"><span>صافي أرباح المنصة</span><b id="wPlatform">0 $</b></div>
+      <div class="row"><span>رسوم 3% المحصّلة</span><b id="wFees">0 $</b></div>
+      <div class="row"><span>عمولة المزوّدين</span><b id="wSupplier">0 $</b></div>
+      <div class="row mint"><span>حصة الشركاء</span><b id="wPartners">0 $</b></div>
+      <div class="row"><span>عدد الحجوزات</span><b id="wCount">0</b></div>
+      <div class="row"><span>الهامش الفعلي</span><b id="wMargin">—</b></div>
+    </div>
+
+    <div class="card">
+      <h4>كيف تُحسب الـ3%؟</h4>
+      <p style="font-size:11.5px;color:#bdc9e6;line-height:1.9">
+        سعر المزوّد <b style="color:#fff">100$</b> ← العميل يدفع <b style="color:#fff">103$</b>.<br>
+        الـ3$ تُقسَّم: <b style="color:var(--mint)">1.5$ لك</b> + <b style="color:#fff">1.5$ للشريك</b> (إن وُجد).<br>
+        إضافة إلى <b style="color:#fff">عمولة المزوّد</b> في القطاعات التي تدفعها (فنادق، سيارات، أنشطة…).
+      </p>
+    </div>
+
+    <div class="card">
+      <h4>سجلّ العمولات <em>حي</em></h4>
+      <div id="ledgerList"><div class="empty">لا حجوزات بعد</div></div>
+    </div>
+  </aside>
+</div>
+
+<div class="wrap strip">
+  <div><b>3% شفافة</b>تظهر على الفاتورة قبل الدفع — لا مفاجآت.</div>
+  <div><b>سعر الخادم هو المرجع</b>لا يمكن تعديل السعر من المتصفح.</div>
+  <div><b>عمولة بعد التأكيد</b>لا تُقيَّد أي عمولة قبل تأكيد المزوّد.</div>
+  <div><b>إلغاء يعكس القيد</b>الاسترداد والإلغاء يُعكسان في الدفتر آليًا.</div>
+</div>
+
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============ إعدادات تتطابق مع الخادم ============ */
+var FEE = 0.03, PARTNER_CUT = 0.5;
+var RATES = { flight:.045, hotel:.12, train:.07, cruise:.06, car:.14, home:.10, activity:.08, transfer:.12, health:.15 };
+var VERT = {
+  flight:{name:'طيران',icon:'✈️',adapter:'Duffel API (NDC)',f:['من','إلى','المغادرة','العودة']},
+  hotel:{name:'فنادق',icon:'🏨',adapter:'LiteAPI / Booking Affiliate',f:['المدينة','اسم الفندق','الوصول','المغادرة']},
+  train:{name:'قطارات',icon:'🚄',adapter:'Distribusion / Trainline',f:['محطة المغادرة','محطة الوصول','تاريخ السفر','المسافرون']},
+  cruise:{name:'بواخر',icon:'🛳️',adapter:'Expedia Cruises',f:['ميناء المغادرة','الوجهة','تاريخ الإبحار','عدد الليالي']},
+  car:{name:'كراء سيارات',icon:'🚗',adapter:'Rentalcars / CarTrawler',f:['بلد الاستلام','موقع التسليم','الاستلام','الإرجاع']},
+  home:{name:'منازل',icon:'🏡',adapter:'Expedia VRBO',f:['المدينة','نوع المسكن','الوصول','عدد الليالي']},
+  activity:{name:'أنشطة',icon:'🎟️',adapter:'Viator API',f:['المدينة','نوع التجربة','التاريخ','عدد الأشخاص']},
+  transfer:{name:'توصيل',icon:'🚐',adapter:'Mozio + شركاء محليون',f:['الانطلاق','الوجهة','التاريخ والوقت','الحقائب']},
+  health:{name:'صحة',icon:'🩺',adapter:'شركاء محليون',f:['المدينة','التخصص','التاريخ','نوع الاستشارة']}
+};
+var LOCAL = {
+  flight:[['الجزائر ← باريس','الخطوط الجزائرية · مباشرة',['3س 05د','مباشرة'],244],['الجزائر ← باريس','ترانزافيا · مباشرة',['3س 10د','مباشرة'],198],['الجزائر ← باريس','لوفتهانزا · توقف',['5س 40د','توقف 1'],226]],
+  hotel:[['Hôtel Le Marais · باريس','4★ · وسط المدينة',['إفطار','إلغاء مجاني'],186],['Ibis Paris Centre','3★ · وسط المدينة',['إلغاء مجاني'],132],['Pullman Tour Eiffel','5★ · إطلالة',['سبا','9.4'],298]],
+  train:[['باريس ← أمستردام','Thalys · مباشر',['3س 20د'],118],['باريس ← ليون','TGV',['2س 05د'],64],['الجزائر ← وهران','درجة أولى',['4س 50د'],22]],
+  cruise:[['البحر المتوسط · 7 ليالٍ','من برشلونة',['وجبات شاملة'],1290],['جزر الكناري · 5 ليالٍ','من مالقة',['شرفة'],940],['النرويج · 9 ليالٍ','من ساوثهامبتون',['جولات'],2180]],
+  car:[['تويوتا ياريس','مطار باريس CDG',['تأمين شامل'],210],['داسيا داستر','مطار الجزائر',['سائق إضافي'],165],['مرسيدس C-Class','دبي',['فاخرة'],520]],
+  home:[['شقة على السين','باريس · superhost',['4 ضيوف'],154],['فيلا · مراكش','مسبح',['6 ضيوف'],238],['بيت ريفي · جيجل','على البحر',['7 ضيوف'],110]],
+  activity:[['جولة برج إيفل','مرشد عربي',['2 ساعات'],68],['رحلة فرساي','نقل + تذاكر',['8 ساعات'],89],['جولة صحراوية','تاغيت',['4 ساعات'],45]],
+  transfer:[['نقل مطار CDG','سيارة خاصة',['سعر ثابت'],62],['استقبال مطار الجزائر','اقتصادية',['سعر ثابت'],18],['توصيل طرود','شريك محلي',['نفس اليوم'],6]],
+  health:[['استشارة أسنان','الجزائر',['حجز فوري'],40],['تحليل دم','بسكرة',['24 ساعة'],28],['طبيب عن بعد','فيديو',['20 دقيقة'],22]]
+};
+
+var state = { v:'flight', sort:'best', offers:[], server:false, ref:new URLSearchParams(location.search).get('ref') || null, ledger:[], totals:{net:0,fee:0,sup:0,partner:0,count:0,gmv:0} };
+var $ = function(s){ return document.querySelector(s); };
+var money = function(n){ return new Intl.NumberFormat('en-US',{maximumFractionDigits: n>=100?0:2}).format(Number(n)||0) + ' $'; };
+
+/* ============ تسعير محلي مطابق للخادم (احتياط عند غياب الخادم) ============ */
+function priceLocal(vertical, price, ref){
+  var fee = Math.round(price*FEE*100)/100;
+  var sup = Math.round(price*RATES[vertical]*100)/100;
+  var cost = vertical==='flight' ? Math.round((3 + price*0.01)*100)/100 : 0;
+  var partner = ref && ref.toUpperCase()!=='MARIA' ? Math.round(fee*PARTNER_CUT*100)/100 : 0;
+  var net = Math.round((fee-partner+sup-cost)*100)/100;
+  return { basePrice:price, platformFee:fee, customerTotal:Math.round((price+fee)*100)/100,
+    supplierCommission:sup, providerCost:cost, partnerEarnings:partner,
+    platformNet:net, platformNetPct:Math.round(net/price*10000)/100 };
+}
+
+/* ============ بناء التبويبات ============ */
+var tabsEl = $('#vtabs');
+Object.keys(VERT).forEach(function(k){
+  var b = document.createElement('button');
+  b.className = 'vtab' + (k===state.v?' on':'');
+  b.dataset.v = k;
+  b.innerHTML = '<span>'+VERT[k].icon+'</span>'+VERT[k].name;
+  b.addEventListener('click', function(){
+    state.v = k;
+    document.querySelectorAll('.vtab').forEach(function(x){ x.classList.toggle('on', x.dataset.v===k); });
+    applyVertical();
+  });
+  tabsEl.appendChild(b);
+});
+
+function applyVertical(){
+  var v = VERT[state.v];
+  $('#lb1').textContent=v.f[0]; $('#lb2').textContent=v.f[1];
+  $('#lb3').textContent=v.f[2]; $('#lb4').textContent=v.f[3];
+  $('#adapterBar').innerHTML = '<span>المزوّد:</span><code>'+v.adapter+'</code><span>· عمولة/هامش نموذجي:</span><b>'+(RATES[state.v]*100).toFixed(1)+'%</b><span>· + رسوم ماريا 3%</span>';
+  doSearch();
+}
+
+/* ============ البحث (خادم ← احتياط محلي) ============ */
+async function doSearch(){
+  $('#results').innerHTML = '<div class="card empty">جارٍ البحث…</div>';
+  var body = { vertical: state.v, ref: state.ref, params: { origin:'ALG', destination:'CDG', departureDate: $('#f3').value, destination_city: $('#f2').value, searchTerm: $('#f2').value } };
+  try {
+    var res = await fetch('/api/search', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(body) });
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    var data = await res.json();
+    state.server = true;
+    state.offers = data.offers;
+    var ad = data.adapter || {};
+    $('#modeBadge').textContent = ad.live ? '● متصل بالمزوّد الحقيقي' : '● وضع تجريبي — بيانات نموذجية';
+    $('#adapterBar').innerHTML += ad.error ? ' <span style="color:var(--pink)">· تعذّر المزوّد، عُرضت بيانات محاكاة</span>' : '';
+  } catch(e) {
+    state.server = false;
+    state.offers = (LOCAL[state.v]||[]).map(function(o,i){
+      var base = { id:'local_'+state.v+'_'+i, vertical:state.v, title:o[0], subtitle:o[1], tags:o[2], price:o[3], source:'local' };
+      base.pricing = priceLocal(state.v, o[3], state.ref);
+      return base;
+    });
+    $('#modeBadge').textContent = '● وضع الصفحة المستقلة (بلا خادم)';
+  }
+  if(state.ref) { var rb=$('#refBadge'); rb.style.display='inline-block'; rb.textContent='ref: '+state.ref; }
+  render();
+}
+
+/* ============ العرض ============ */
+function render(){
+  var list = state.offers.slice();
+  if(state.sort==='cheap') list.sort(function(a,b){ return a.pricing.basePrice-b.pricing.basePrice; });
+  else if(state.sort==='comm') list.sort(function(a,b){ return b.pricing.platformNet-a.pricing.platformNet; });
+
+  $('#resTitle').textContent = VERT[state.v].name + ' — ' + list.length + ' نتيجة';
+  $('#results').innerHTML = list.map(function(o,i){
+    var q = o.pricing;
+    return '<div class="offer" style="animation-delay:'+(i*45)+'ms">'+
+      '<div class="oflogo">'+VERT[state.v].icon+'</div>'+
+      '<div class="ofmain"><b>'+o.title+'</b><div class="route">'+o.subtitle+'</div>'+
+        '<div class="chips">'+(o.tags||[]).map(function(t){return '<span>'+t+'</span>';}).join('')+
+        '<span style="color:'+(o.source&&o.source.indexOf('mock')===0?'var(--gold)':'var(--mint)')+'">'+(o.source||'local')+'</span></div></div>'+
+      '<div class="ofside">'+
+        '<div class="price">'+money(q.customerTotal)+'<small>'+(q.affiliateMode?'السعر لدى المزوّد':'الإجمالي مع 3% ('+money(q.basePrice)+' + '+money(q.platformFee)+')')+'</small></div>'+
+        '<div class="fee">'+(q.affiliateMode?'عمولتنا المتوقّعة: ':'ربح المنصة: ')+money(q.platformNet)+'</div>'+
+        '<button class="bookbtn" data-i="'+i+'">احجز الآن</button>'+
+      '</div></div>';
+  }).join('');
+
+  document.querySelectorAll('.bookbtn').forEach(function(b){
+    b.addEventListener('click', function(){
+      var sorted = list[Number(b.dataset.i)];
+      openCheckout(sorted);
+    });
+  });
+}
+
+/* ============ الحجز ============ */
+var overlay = $('#overlay'), modal = $('#modal');
+function openCheckout(o){
+  var q = o.pricing;
+  var mine = q.platformNet;
+  if (q.affiliateMode) {
+    modal.innerHTML =
+      '<div class="modal-head"><b>إحالة إلى المزوّد — '+VERT[state.v].name+'</b><button class="x" id="closeX">✕</button></div>'+
+      '<div class="modal-body">'+
+        '<div style="font-size:13.5px;font-weight:800">'+o.title+'</div>'+
+        '<div style="font-size:12px;color:var(--muted);margin-bottom:12px">'+o.subtitle+'</div>'+
+        '<div class="mline"><span>السعر لدى المزوّد</span><b>'+money(q.basePrice)+'</b></div>'+
+        '<div class="mline"><span>رسوم ماريا على العميل</span><b>0 (لا نستلم أموالًا)</b></div>'+
+        '<div class="mline total"><span>يدفع العميل للمزوّد</span><b>'+money(q.basePrice)+'</b></div>'+
+        '<div class="sep">داخليًا</div>'+
+        '<div class="mline"><span>عمولة المزوّد المتوقّعة ('+(RATES[state.v]*100).toFixed(1)+'%)</span><b>'+money(q.supplierCommission)+'</b></div>'+
+        '<div class="mline"><span>حصة الشريك</span><b>'+money(q.partnerEarnings)+'</b></div>'+
+        '<div class="mline mint total"><span>صافي المنصة المتوقّع</span><b>'+money(mine)+'</b></div>'+
+        '<button class="confirm" id="doConfirm">تسجيل الإحالة ومتابعة الحجز</button>'+
+        '<p class="modal-note">وضع الوسيط: لا نستلم أي مبلغ من العميل. تُثبَّت العمولة بعد مطابقة تقرير المزوّد.</p>'+
+      '</div>';
+    overlay.classList.add('on');
+    $('#closeX').addEventListener('click', close);
+    $('#doConfirm').addEventListener('click', function(){ confirmBooking(o); });
+    return;
+  }
+  var share = Math.max(0, Math.min(100, (q.platformFee - q.partnerEarnings) / q.platformFee * 100));
+
+  modal.innerHTML =
+    '<div class="modal-head"><b>تأكيد الحجز — '+VERT[state.v].name+'</b><button class="x" id="closeX">✕</button></div>'+
+    '<div class="modal-body">'+
+      '<div style="font-size:13.5px;font-weight:800">'+o.title+'</div>'+
+      '<div style="font-size:12px;color:var(--muted);margin-bottom:12px">'+o.subtitle+'</div>'+
+      '<div class="mline"><span>سعر المزوّد</span><b>'+money(q.basePrice)+'</b></div>'+
+      '<div class="mline"><span>رسوم ماريا (3%)</span><b>'+money(q.platformFee)+'</b></div>'+
+      (q.providerCost ? '<div class="mline"><span>تكلفة المزوّد التشغيلية</span><b>− '+money(q.providerCost)+'</b></div>' : '')+
+      '<div class="mline total"><span>الإجمالي على العميل</span><b>'+money(q.customerTotal)+'</b></div>'+
+      '<div class="sep">داخليًا — لا يظهر للعميل</div>'+
+      '<div class="mline"><span>عمولة/هامش المزوّد ('+(RATES[state.v]*100).toFixed(1)+'%)</span><b>'+money(q.supplierCommission)+'</b></div>'+
+      (q.partnerEarnings ? '<div class="mline"><span>حصة الشريك من رسوم 3%</span><b>'+money(q.partnerEarnings)+'</b></div>' : '')+
+      '<div class="mline mint total"><span>صافي ربح المنصة</span><b>'+money(mine)+'</b></div>'+
+      '<div class="spectrum"><div class="a" style="width:'+share.toFixed(1)+'%">'+share.toFixed(0)+'%</div><div class="b" style="width:'+(100-share).toFixed(1)+'%">'+(share<100?(100-share).toFixed(0)+'% للشريك':'')+'</div></div>'+
+      (state.server
+        ? '<label style="display:block;font-size:11.5px;color:var(--muted);margin:14px 0 5px;font-weight:800">الاسم الكامل</label>'+
+          '<input id="rqName" placeholder="أمين بن علي" style="width:100%;background:#0a1322;border:1px solid #1c2942;border-radius:10px;padding:11px;color:#eaf0ff;font-family:inherit;font-size:14px">'+
+          '<label style="display:block;font-size:11.5px;color:var(--muted);margin:10px 0 5px;font-weight:800">البريد الإلكتروني</label>'+
+          '<input id="rqMail" type="email" placeholder="you@example.com" style="width:100%;background:#0a1322;border:1px solid #1c2942;border-radius:10px;padding:11px;color:#eaf0ff;font-family:inherit;font-size:14px;direction:ltr;text-align:left">'+
+          '<label style="display:block;font-size:11.5px;color:var(--muted);margin:10px 0 5px;font-weight:800">الهاتف (واتساب)</label>'+
+          '<input id="rqPhone" inputmode="tel" placeholder="0555 00 00 00" style="width:100%;background:#0a1322;border:1px solid #1c2942;border-radius:10px;padding:11px;color:#eaf0ff;font-family:inherit;font-size:14px;direction:ltr;text-align:left">'+
+          '<label style="display:block;font-size:11.5px;color:var(--muted);margin:10px 0 5px;font-weight:800">ملاحظة (اختياري)</label>'+
+          '<input id="rqNote" placeholder="رحلة صباحية، غرفة هادئة…" style="width:100%;background:#0a1322;border:1px solid #1c2942;border-radius:10px;padding:11px;color:#eaf0ff;font-family:inherit;font-size:14px">'+
+          '<div id="rqErr" style="color:var(--pink);font-size:12px;margin-top:9px;min-height:14px"></div>'+
+          '<button class="confirm" id="doConfirm">اطلب الحجز — لا دفع الآن</button>'+
+          '<p class="modal-note">طلبك يصلنا فورًا. نتحقّق من التوفّر ونردّ عليك بالبريد. <b>لن تدفع أي مبلغ قبل موافقتنا</b> — تُؤكَّد العمولة فقط بعد تأكيد المزوّد.</p>'
+        : '<button class="confirm" id="doConfirm">تأكيد الحجز ودفع '+money(q.customerTotal)+'</button>'+
+          '<p class="modal-note">وضع مستقل: محاكاة كاملة بلا خادم.</p>')+
+    '</div>';
+
+  overlay.classList.add('on');
+  $('#closeX').addEventListener('click', close);
+  $('#doConfirm').addEventListener('click', function(){
+    if (state.server && $('#rqName')) return submitRequest(o);
+    confirmBooking(o);
+  });
+}
+
+/* ═══ إرسال طلب حجز (الوضع الافتراضي: العميل يطلب ونؤكّد) ═══ */
+async function submitRequest(o){
+  var name = $('#rqName').value.trim(), mail = $('#rqMail').value.trim(), phone = $('#rqPhone').value.trim();
+  var note = $('#rqNote') ? $('#rqNote').value.trim() : '';
+  var err = $('#rqErr');
+  if(err) err.textContent = '';
+  if(name.length < 3) return err && (err.textContent = 'اكتب اسمك الكامل');
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(mail)) return err && (err.textContent = 'البريد غير صحيح — عليه سيصل التأكيد');
+  if(phone.replace(/\D/g,'').length < 9) return err && (err.textContent = 'رقم الهاتف ناقص');
+
+  var btn = $('#doConfirm'); btn.disabled = true; btn.textContent = 'جارٍ الإرسال…';
+  try{
+    var res = await fetch('/api/requests', { method:'POST', headers:{'content-type':'application/json'},
+      body: JSON.stringify({ offerId:o.id, ref:state.ref, note:note, customer:{ name:name, email:mail, phone:phone } }) });
+    var data = await res.json();
+    if(!res.ok) throw new Error(data.error || ('HTTP '+res.status));
+    var rq = data.request;
+    modal.innerHTML = '<div class="modal-head"><b>تم إرسال طلبك ✓</b><button class="x" id="closeX2">✕</button></div>'+
+      '<div class="modal-body sent"><div class="tick">✓</div><b>طلبك وصلنا</b>'+
+      '<p>نتحقّق من التوفّر والسعر النهائي ونراسلك على <span style="color:var(--ink)">'+mail+'</span>.<br><b style="color:var(--mint)">لن تدفع أي مبلغ قبل موافقتنا.</b></p>'+
+      '<div class="ref" style="letter-spacing:3px">'+rq.code+'</div>'+
+      '<div style="font-size:12px;color:var(--muted);margin-bottom:12px">احفظ هذا الرقم لتتبّع طلبك</div>'+
+      '<a class="confirm" style="display:block;text-decoration:none;text-align:center" href="/request?code='+rq.code+'">تتبّع الطلب</a>'+
+      '<button class="confirm" id="closeX3" style="background:transparent;border:1px solid #1c2942;color:var(--muted)">إغلاق</button></div>';
+    $('#closeX2').onclick = close; $('#closeX3').onclick = close;
+  } catch(e){
+    btn.disabled = false; btn.textContent = 'اطلب الحجز — لا دفع الآن';
+    if(err) err.textContent = e.message;
+  }
+}
+
+function close(){ overlay.classList.remove('on'); }
+
+async function confirmBooking(o){
+  var q = o.pricing, bookingId = null, replayed = false;
+
+  if(state.server){
+    try {
+      var idem = 'web-' + o.id + '-' + (state.ref||'direct');
+      var res = await fetch('/api/bookings', { method:'POST', headers:{'content-type':'application/json','idempotency-key':idem},
+        body: JSON.stringify({ offerId:o.id, ref:state.ref, customer:{name:'عميل الويب'}, idempotencyKey:idem }) });
+      var data = await res.json();
+      if(!res.ok) throw new Error(data.error || ('HTTP '+res.status));
+      bookingId = data.booking.id; replayed = data.replayed; q = data.booking.pricing;
+      if (data.affiliate) {
+        var handoff = data.booking.handoff_url || data.booking.handoffUrl || null;
+        modal.innerHTML = '<div class="modal-head"><b>تم تسجيل الإحالة ✓</b><button class="x" id="closeX2">✕</button></div>'+
+          '<div class="modal-body sent"><div class="tick">✓</div><b>إحالتك مسجَّلة</b>'+
+          '<p>أكمل الدفع لدى المزوّد، وستُقيَّد عمولتنا بعد مطابقة تقريره.</p>'+
+          '<div class="ref">'+bookingId+'</div>'+
+          '<div style="margin-top:13px;font-size:12.5px;font-weight:800;color:var(--mint)">عمولة متوقّعة: '+money(q.supplierCommission)+' · صافي المنصة: '+money(q.platformNet)+'</div>'+
+          (handoff?'<a class="confirm" style="display:block;text-decoration:none;text-align:center" href="'+handoff+'" target="_blank">إكمال الحجز لدى المزوّد ↗</a>':'')+
+          '<button class="confirm" id="closeX3">إغلاق</button></div>';
+        $('#closeX2').onclick = close; $('#closeX3').onclick = close;
+        state.ledger.unshift({ t: VERT[state.v].name + ' · ' + o.title, net: q.platformNet, fee: 0 });
+        if(state.ledger.length>6) state.ledger.pop();
+        paintLedger();
+        loadWallet();
+        return;
+      }
+      loadWallet();
+    } catch(e) {
+      // فشل الحجز → لا نُثبت عمولة
+      modal.innerHTML = '<div class="modal-head"><b>تعذّر إتمام الحجز</b><button class="x" id="closeX4">✕</button></div>'+
+        '<div class="modal-body sent"><div class="tick" style="color:var(--pink);background:rgba(255,111,165,.14);border-color:rgba(255,111,165,.4)">!</div>'+
+        '<b>'+e.message+'</b><p style="margin-top:6px">لم تُقيَّد أي عمولة. جرّب إعادة البحث.</p>'+
+        '<button class="confirm" id="closeX5">إغلاق</button></div>';
+      $('#closeX4').onclick = close; $('#closeX5').onclick = close;
+      return;
+    }
+  } else {
+    bookingId = 'LOCAL-' + Math.random().toString(36).slice(2,7).toUpperCase();
+    state.totals.net += q.platformNet; state.totals.fee += q.platformFee;
+    state.totals.sup += q.supplierCommission; state.totals.partner += q.partnerEarnings;
+    state.totals.count += 1; state.totals.gmv += q.basePrice;
+    paintLocalWallet();
+  }
+
+  state.ledger.unshift({ t: VERT[state.v].name + ' · ' + o.title, net: q.platformNet, fee: q.platformFee });
+  if(state.ledger.length>6) state.ledger.pop();
+  paintLedger();
+
+  modal.innerHTML = '<div class="modal-head"><b>تم الحجز ✓</b><button class="x" id="closeX2">✕</button></div>'+
+    '<div class="modal-body sent"><div class="tick">✓</div><b>حجزك مؤكَّد</b>'+
+    '<p>أُرسلت التذاكر إلى بريدك، وقُيّدت العمولة في الدفتر.</p>'+
+    '<div class="ref">'+bookingId+'</div>'+
+    '<div style="margin-top:13px;font-size:12.5px;font-weight:800;color:var(--mint)">صافي المنصة من هذا الحجز: '+money(q.platformNet)+'</div>'+
+    '<div style="font-size:11.5px;color:var(--muted);margin-top:3px">رسوم 3% = '+money(q.platformFee)+(q.partnerEarnings?' · شريكك '+money(q.partnerEarnings):'')+'</div>'+
+    (replayed?'<div style="font-size:11px;color:var(--gold);margin-top:8px">تنبيه: هذا العرض مُسجَّل مسبقًا (idempotency) — لم تُضاعف العمولة.</div>':'')+
+    '<button class="confirm" id="closeX3">متابعة</button></div>';
+  $('#closeX2').onclick = close; $('#closeX3').onclick = close;
+}
+
+/* ============ المحفظة ============ */
+async function loadWallet(){
+  try {
+    var res = await fetch('/api/summary');
+    var s = await res.json();
+    $('#wNet').textContent = money(s.platformNet);
+    $('#wPlatform').textContent = money(s.platformNet);
+    $('#wFees').textContent = money(s.customerFees);
+    $('#wSupplier').textContent = money(s.supplierCommission);
+    $('#wPartners').textContent = money(s.partnersUnpaid + s.partnersPaid);
+    $('#wCount').textContent = s.confirmed;
+    $('#wMargin').textContent = s.effectiveMarginPct + '%';
+  } catch(e){ /* بلا خادم */ }
+}
+function paintLocalWallet(){
+  $('#wNet').textContent = money(state.totals.net);
+  $('#wPlatform').textContent = money(state.totals.net);
+  $('#wFees').textContent = money(state.totals.fee);
+  $('#wSupplier').textContent = money(state.totals.sup);
+  $('#wPartners').textContent = money(state.totals.partner);
+  $('#wCount').textContent = state.totals.count;
+  $('#wMargin').textContent = state.totals.gmv ? (state.totals.net/state.totals.gmv*100).toFixed(2)+'%' : '—';
+}
+function paintLedger(){
+  $('#ledgerList').innerHTML = state.ledger.length ? state.ledger.map(function(r){
+    return '<div class="row"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+r.t+'</span><b>'+money(r.net)+'</b></div>';
+  }).join('') : '<div class="empty">لا حجوزات بعد</div>';
+}
+
+/* ============ أحداث ============ */
+$('#doSearch').addEventListener('click', doSearch);
+$('#sortsel').addEventListener('change', function(e){ state.sort = e.target.value; render(); });
+overlay.addEventListener('click', function(e){ if(e.target===overlay) close(); });
+
+applyVertical();
+loadWallet();
+})();
+</script>
+</body>
+</html>

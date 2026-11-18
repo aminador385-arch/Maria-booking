@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>انضم كشريك — ماريا 3%</title>
+<style>
+:root{
+  --bg:#060a12;--panel:rgba(255,255,255,.05);--panel2:rgba(255,255,255,.08);--line:rgba(255,255,255,.1);
+  --text:#eaf0ff;--muted:#8f9dbb;--mint:#39e6c3;--gold:#ffc36b;
+  --grad:linear-gradient(135deg,#39e6c3,#6d8bff 55%,#a06bff);--font:"Segoe UI","Noto Kufi Arabic",Tahoma,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.75}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:
+ radial-gradient(760px 460px at 90% -10%,rgba(123,108,255,.26),transparent 62%),
+ radial-gradient(680px 420px at 0% 0%,rgba(57,230,195,.15),transparent 60%),
+ linear-gradient(180deg,#060a12,#070c16 50%,#05080f)}
+.wrap{width:min(1080px,94vw);margin-inline:auto;padding:26px 0 60px}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+a{color:inherit;text-decoration:none}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;margin-bottom:26px}
+.brand small{display:block;font-size:9.5px;letter-spacing:2px;color:var(--muted);font-weight:700;line-height:1}
+h1{font-size:clamp(24px,3vw,36px);letter-spacing:-1px;line-height:1.25;margin-bottom:8px}
+.lead{color:#b3c0dd;font-size:14.5px;max-width:620px;margin-bottom:24px}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:start}
+.card{background:linear-gradient(160deg,rgba(20,27,45,.92),rgba(10,15,26,.94));border:1px solid var(--line);border-radius:20px;padding:22px}
+.form label{display:block;font-size:11.5px;font-weight:800;color:var(--muted);margin:12px 0 5px}
+.form input,.form select{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:11px;padding:10px 13px;color:var(--text);font-family:inherit;font-size:13px;outline:none}
+.form input:focus,.form select:focus{border-color:rgba(57,230,195,.55)}
+.form select option{background:#0b1120}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{width:100%;margin-top:18px;padding:13px;border:none;border-radius:12px;background:var(--grad);color:#04121a;font-family:inherit;font-weight:900;font-size:14.5px;cursor:pointer}
+.btn:hover{filter:brightness(1.07)}
+.btn.ghost{background:var(--panel);border:1px solid var(--line);color:var(--text);font-size:12.5px;padding:10px}
+.side .card{margin-bottom:14px}
+.side h3{font-size:14px;margin-bottom:10px}
+.side p,.side li{font-size:12.5px;color:#b3c0dd}
+.side ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.side li{display:flex;gap:8px}
+.side li b{color:var(--mint)}
+.tick{color:var(--mint);font-weight:900}
+.steps{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+.step{display:flex;gap:9px;font-size:12.5px;color:#bdc9e6}
+.step i{width:21px;height:21px;flex:none;border-radius:7px;display:grid;place-items:center;background:rgba(57,230,195,.14);border:1px solid rgba(57,230,195,.3);color:var(--mint);font-style:normal;font-size:11px;font-weight:900}
+.ok-card{display:none}
+.ok-card.on{display:block}
+.kv{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.1)}
+.kv:last-child{border:none}
+.code{font-family:ui-monospace,monospace;font-size:11.5px;background:rgba(255,255,255,.07);border:1px solid var(--line);padding:3px 9px;border-radius:8px;color:#dfe8ff;cursor:pointer;word-break:break-all}
+.code:hover{border-color:rgba(57,230,195,.5);color:var(--mint)}
+.warn{font-size:11px;color:var(--gold);background:rgba(255,195,107,.1);border:1px solid rgba(255,195,107,.3);border-radius:10px;padding:9px 11px;margin-top:12px}
+.toast{position:fixed;bottom:16px;inset-inline-start:16px;background:var(--grad);color:#04121a;font-weight:900;font-size:12.5px;padding:11px 16px;border-radius:12px;opacity:0;transform:translateY(12px);transition:.25s}
+.toast.on{opacity:1;transform:none}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="brand" href="/">
+    <svg width="34" height="34" viewBox="0 0 48 48" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="48" y2="48"><stop offset="0" stop-color="#39e6c3"/><stop offset=".55" stop-color="#6d8bff"/><stop offset="1" stop-color="#a06bff"/></linearGradient></defs><rect x="1.5" y="1.5" width="45" height="45" rx="14" fill="url(#g)" opacity=".16" stroke="url(#g)" stroke-width="2"/><path d="M24 20.5l1.9 4.6 4.6 1.9-4.6 1.9-1.9 4.6-1.9-4.6-4.6-1.9 4.6-1.9 1.9-4.6Z" fill="#fff"/></svg>
+    <span>ماريا<small>PARTNER ONBOARDING · 3%</small></span>
+  </a>
+
+  <h1>انضم كشريك — وابدأ البيع في <span class="grad-text">دقيقتين</span></h1>
+  <p class="lead">احصل على كود إحالة ومفتاح API وبوابة خاصة. أنت تبيع الحجوزات، ونقسم رسوم الـ3%: <b style="color:#fff">1.5% لك</b> و1.5% لنا، وتحويل أسبوعي.</p>
+
+  <div class="grid">
+    <div class="card">
+      <form class="form" id="form">
+        <label>اسم الشريك / النشاط *</label>
+        <input id="name" placeholder="وكالة نور للسفر — وهران" required />
+        <div class="row2">
+          <div>
+            <label>نوع الشريك</label>
+            <select id="type">
+              <option value="agency">وكالة سفر</option>
+              <option value="kiosk">كشك / نقطة بيع</option>
+              <option value="influencer">مؤثر / مسوّق</option>
+              <option value="hotel">فندق / مكتب استقبال</option>
+              <option value="corporate">شركة</option>
+            </select>
+          </div>
+          <div>
+            <label>البلد</label>
+            <input id="country" value="DZ" />
+          </div>
+        </div>
+        <div class="row2">
+          <div><label>البريد الإلكتروني *</label><input id="email" type="email" placeholder="you@example.com" required /></div>
+          <div><label>الهاتف</label><input id="phone" placeholder="+213 5xx xxx xxx" /></div>
+        </div>
+        <div class="row2">
+          <div>
+            <label>طريقة استلام العمولة</label>
+            <select id="payoutType">
+              <option value="ccp">بريد الجزائر — CCP (موصى به)</option>
+              <option value="bank">تحويل بنكي</option>
+              <option value="wise">Wise</option>
+            </select>
+          </div>
+          <div><label>صاحب الحساب البريدي (كما في الدفتر)</label><input id="holderName" placeholder="الاسم واللقب" /></div>
+        </div>
+        <div class="row2">
+          <div><label>رقم الحساب البريدي CCP</label><input id="ccpNumber" inputmode="numeric" placeholder="10 أرقام (أو RIP 20 رقمًا)" /></div>
+          <div><label>مفتاح الحساب (clé)</label><input id="ccpKey" inputmode="numeric" maxlength="2" placeholder="مثال: 04" /></div>
+        </div>
+        <div class="row2">
+          <div><label>مكتب البريد</label><input id="ccpAgency" placeholder="بسكرة المركز" /></div>
+          <div><label>ملاحظة</label><input disabled value="العمولة تُحوَّل بالدينار إلى CCP" /></div>
+        </div>
+        <button class="btn" id="submit">إنشاء حساب الشريك</button>
+      </form>
+
+      <div class="ok-card" id="ok">
+        <div style="font-size:15px;font-weight:900;margin-bottom:4px">تم إنشاء حسابك ✓</div>
+        <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px" id="okMsg"></p>
+        <div class="kv"><span>كود الشريك</span><span class="code" id="outCode">—</span></div>
+        <div class="kv"><span>رابط الإحالة</span><span class="code" id="outLink">—</span></div>
+        <div class="kv"><span>مفتاح API</span><span class="code" id="outKey">—</span></div>
+        <div class="kv"><span>الحالة</span><b id="outStatus" style="color:var(--mint)">—</b></div>
+        <div class="warn">احفظ مفتاح API الآن — لن يُعرض مرة أخرى. استخدمه في بوابة الشريك (<b>/partner</b>) أو لربط نظامك.</div>
+        <button class="btn" id="goPortal" style="margin-top:14px">فتح بوابة الشريك</button>
+        <a class="btn ghost" href="/" style="display:block;text-align:center;margin-top:8px">تجربة واجهة الحجز</a>
+      </div>
+    </div>
+
+    <div class="side">
+      <div class="card">
+        <h3>كيف تكسب؟</h3>
+        <ul>
+          <li><span class="tick">1.5%</span><span>من قيمة كل حجز يمر بكودك (نصف رسوم الـ3%).</span></li>
+          <li><span class="tick">شفافية</span><span>كل حجز يظهر بقيمته ورسومه وحصتك لحظيًا.</span></li>
+          <li><span class="tick">أسبوعيًا</span><span>تحويل مستحقاتك كل 7 أيام بعد تأكيد الحجز.</span></li>
+          <li><span class="tick">9 قطاعات</span><span>طيران، فنادق، قطارات، بواخر، سيارات، منازل، أنشطة، توصيل، صحة.</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>ما الذي ستحصل عليه؟</h3>
+        <div class="steps">
+          <div class="step"><i>١</i><span>كود إحالة فريد + رابط جاهز للمشاركة.</span></div>
+          <div class="step"><i>٢</i><span>مفتاح API لربط موقعك/تطبيقك (Bearer).</span></div>
+          <div class="step"><i>٣</i><span>بوابة شريك: حجوزات، عمولات، تحويلات، رابط إحالة.</span></div>
+          <div class="step"><i>٤</i><span>تقارير قابلة للتدقيق لكل قيد مالي.</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>هل أنت مستخدم عادي؟</h3>
+        <p>لا تحتاج تسجيلًا: احجز مباشرة وستدفع السعر + 3% شفافة فقط. <a href="/" style="color:var(--mint);font-weight:800">اذهب للحجز ↗</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const toast = (m) => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2400); };
+
+let API_KEY = '';
+
+$('#form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = $('#submit'); btn.disabled = true; btn.textContent = 'جارٍ الإنشاء…';
+  try {
+    const res = await fetch('/api/partners/apply', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        name: $('#name').value.trim(), type: $('#type').value, email: $('#email').value.trim(),
+        phone: $('#phone').value.trim(), country: $('#country').value.trim(),
+        payoutMethod: { type: $('#payoutType').value, masked: $('#ccpNumber').value.trim().slice(-4) },
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'تعذّر إنشاء الحساب');
+
+    /* تسجيل الحساب البريدي فورًا (اختياري: يمكن إكماله لاحقًا من بوابة الشريك) */
+    let ccpMsg = '';
+    if ($('#ccpNumber').value.trim() && $('#holderName').value.trim()) {
+      const accRes = await fetch('/api/payouts/account', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', authorization: 'Bearer ' + data.apiKey },
+        body: JSON.stringify({
+          method: $('#payoutType').value,
+          holderName: $('#holderName').value.trim(),
+          ccpNumber: $('#ccpNumber').value.trim(),
+          ccpKey: $('#ccpKey').value.trim(),
+          ccpAgency: $('#ccpAgency').value.trim(),
+        }),
+      });
+      const accData = await accRes.json();
+      ccpMsg = accRes.ok ? ' · حساب بريدي: ' + accData.account.masked : ' · تعذّر حفظ الحساب البريدي: ' + (accData.error || '');
+    }
+
+    API_KEY = data.apiKey;
+    $('#form').style.display = 'none';
+    $('#ok').classList.add('on');
+    $('#okMsg').textContent = data.message + ccpMsg;
+    $('#outCode').textContent = data.partner.code;
+    $('#outLink').textContent = data.referralLink;
+    $('#outKey').textContent = data.apiKey;
+    $('#outStatus').textContent = data.partner.status === 'active' ? 'مُفعّل — جاهز للبيع' : 'قيد المراجعة';
+    localStorage.setItem('maria_code', data.partner.code);
+    localStorage.setItem('maria_token', data.apiKey);
+    toast('تم إنشاء الحساب — احفظ مفتاحك');
+  } catch (err) {
+    toast('خطأ: ' + err.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'إنشاء حساب الشريك';
+  }
+});
+
+$('#goPortal').addEventListener('click', () => { location.href = '/partner'; });
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('code') && e.target.textContent !== '—') {
+    navigator.clipboard?.writeText(e.target.textContent).then(() => toast('نُسخ'));
+  }
+});
+</script>
+</body>
+</html>

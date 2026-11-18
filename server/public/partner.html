@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>بوابة الشريك — ماريا</title>
+<style>
+:root{
+  --bg:#060a12;--panel:rgba(255,255,255,.05);--panel2:rgba(255,255,255,.08);--line:rgba(255,255,255,.1);
+  --text:#eaf0ff;--muted:#8f9dbb;--mint:#39e6c3;--gold:#ffc36b;--pink:#ff6fa5;
+  --grad:linear-gradient(135deg,#39e6c3,#6d8bff 55%,#a06bff);--font:"Segoe UI","Noto Kufi Arabic",Tahoma,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.75}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:
+ radial-gradient(760px 460px at 92% -10%,rgba(123,108,255,.24),transparent 62%),
+ radial-gradient(680px 420px at 2% 0%,rgba(57,230,195,.14),transparent 60%),
+ linear-gradient(180deg,#060a12,#070c16 50%,#05080f)}
+.wrap{width:min(1150px,94vw);margin-inline:auto;padding:22px 0 56px}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+a{color:inherit;text-decoration:none}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px}
+.brand small{display:block;font-size:9.5px;letter-spacing:2px;color:var(--muted);font-weight:700;line-height:1}
+.btn{font-family:inherit;font-weight:800;font-size:12.5px;padding:9px 15px;border-radius:11px;border:1px solid var(--line);background:var(--panel);color:#cdd8f3;cursor:pointer}
+.btn.primary{background:var(--grad);color:#04121a;border-color:transparent}
+.badge{font-size:10.5px;font-weight:800;padding:5px 11px;border-radius:999px;border:1px solid rgba(57,230,195,.35);background:rgba(57,230,195,.14);color:var(--mint)}
+.badge.pending{border-color:rgba(255,195,107,.35);background:rgba(255,195,107,.14);color:var(--gold)}
+.login{max-width:430px;margin:8vh auto 0;background:linear-gradient(160deg,rgba(20,27,45,.94),rgba(10,15,26,.96));border:1px solid var(--line);border-radius:20px;padding:26px}
+.login h1{font-size:20px;margin-bottom:6px}
+.login p{font-size:12.5px;color:var(--muted);margin-bottom:16px}
+label{display:block;font-size:11.5px;font-weight:800;color:var(--muted);margin:11px 0 5px}
+input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:11px;padding:10px 13px;color:var(--text);font-family:inherit;font-size:13px;outline:none}
+input:focus{border-color:rgba(57,230,195,.55)}
+.login .btn{width:100%;margin-top:16px;padding:12px;font-size:14px}
+#portal{display:none}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0 18px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:15px}
+.kpi span{font-size:11px;color:var(--muted);font-weight:700;display:block;margin-bottom:4px}
+.kpi b{font-size:20px;letter-spacing:-.8px;display:block}
+.kpi.hl{background:linear-gradient(160deg,rgba(57,230,195,.16),rgba(123,108,255,.2));border-color:rgba(255,255,255,.18)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:16px}
+.card-h{padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.07);font-size:12.5px;font-weight:800;display:flex;justify-content:space-between;align-items:center}
+table{width:100%;border-collapse:collapse;font-size:12.2px}
+th{text-align:start;font-size:10.5px;color:var(--muted);font-weight:800;padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.09)}
+td{padding:10px 12px;border-bottom:1px dashed rgba(255,255,255,.06);color:#c9d5ef;white-space:nowrap}
+td.amt{color:var(--mint);font-weight:900}
+.pill{font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px}
+.pill.ok{background:rgba(57,230,195,.13);color:var(--mint);border:1px solid rgba(57,230,195,.3)}
+.pill.wait{background:rgba(255,195,107,.13);color:var(--gold);border:1px solid rgba(255,195,107,.3)}
+.pill.no{background:rgba(255,111,165,.13);color:var(--pink);border:1px solid rgba(255,111,165,.3)}
+.linkbox{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:14px 16px}
+.code{font-family:ui-monospace,monospace;font-size:11.5px;background:rgba(255,255,255,.06);border:1px solid var(--line);padding:6px 10px;border-radius:9px;color:#dfe8ff;cursor:pointer;word-break:break-all}
+.empty{padding:18px;text-align:center;color:var(--muted);font-size:12px}
+.toast{position:fixed;bottom:16px;inset-inline-start:16px;background:var(--grad);color:#04121a;font-weight:900;font-size:12.5px;padding:11px 16px;border-radius:12px;opacity:0;transform:translateY(12px);transition:.25s}
+.toast.on{opacity:1;transform:none}
+@media(max-width:820px){.kpis{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="brand" href="/">
+      <svg width="32" height="32" viewBox="0 0 48 48" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="48" y2="48"><stop offset="0" stop-color="#39e6c3"/><stop offset=".55" stop-color="#6d8bff"/><stop offset="1" stop-color="#a06bff"/></linearGradient></defs><rect x="1.5" y="1.5" width="45" height="45" rx="14" fill="url(#g)" opacity=".16" stroke="url(#g)" stroke-width="2"/><path d="M24 20.5l1.9 4.6 4.6 1.9-4.6 1.9-1.9 4.6-1.9-4.6-4.6-1.9 4.6-1.9 1.9-4.6Z" fill="#fff"/></svg>
+      <span>ماريا<span style="font-weight:700"> — بوابة الشريك</span><small>PARTNER PORTAL</small></span>
+    </a>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="badge" id="statusBadge" style="display:none">—</span>
+      <a class="btn" href="/join">تسجيل شريك جديد</a>
+      <button class="btn" id="logout" style="display:none">خروج</button>
+    </div>
+  </header>
+
+  <!-- تسجيل الدخول -->
+  <div class="login" id="login">
+    <h1>دخول الشريك</h1>
+    <p>أدخل كود الشريك والبريد المسجّل — أو استخدم مفتاح API مباشرة.</p>
+    <label>كود الشريك</label>
+    <input id="code" placeholder="MARIA / NOUR-ORAN" />
+    <label>البريد الإلكتروني</label>
+    <input id="email" type="email" placeholder="you@example.com" />
+    <label>أو مفتاح API</label>
+    <input id="apiKey" placeholder="mrn_..." />
+    <button class="btn primary" id="doLogin">دخول</button>
+    <p style="margin-top:12px;font-size:11px">لا تملك حسابًا؟ <a href="/join" style="color:var(--mint);font-weight:800">سجّل في دقيقتين ↗</a></p>
+  </div>
+
+  <!-- البوابة -->
+  <div id="portal">
+    <h1 style="font-size:clamp(19px,2.4vw,25px);letter-spacing:-.6px">مرحبًا <span class="grad-text" id="pName">—</span></h1>
+    <p style="color:var(--muted);font-size:12.5px;margin-bottom:6px">كل رقم هنا من دفتر القيود على Postgres — لا أرقام مُقدَّرة.</p>
+
+    <div class="kpis">
+      <div class="kpi"><span>حجوزات مؤكَّدة</span><b id="kBookings">0</b></div>
+      <div class="kpi"><span>حجم المبيعات</span><b id="kGmv">0 $</b></div>
+      <div class="kpi hl"><span>حصتك المستحقة (1.5%)</span><b class="grad-text" id="kUnpaid">0 $</b><span style="font-size:10.5px;color:var(--muted)" id="kUnpaidDzd">— دج</span></div>
+      <div class="kpi"><span>إجمالي ما ربحته</span><b id="kEarned">0 $</b></div>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><span>رابط الإحالة الخاص بك</span><span style="font-size:10.5px;color:var(--muted)">كل حجز عبره = 1.5% لك</span></div>
+      <div class="linkbox">
+        <span class="code" id="refLink">—</span>
+        <button class="btn" id="copyLink">نسخ الرابط</button>
+        <a class="btn" id="testLink" target="_blank">فتح واجهة الحجز ↗</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><span>أحدث حجوزاتك</span><span style="font-size:10.5px;color:var(--muted)" id="lastUpd">—</span></div>
+      <div style="overflow:auto">
+        <table>
+          <thead><tr><th>الحجز</th><th>القطاع</th><th>العرض</th><th>سعر المزوّد</th><th>رسوم 3%</th><th>حصتك</th><th>الحالة</th><th>التاريخ</th></tr></thead>
+          <tbody id="rows"><tr><td colspan="8" class="empty">لا حجوزات بعد</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><span>حسابي البريدي (CCP) — مكان استلام العمولة</span><span style="font-size:10.5px;color:var(--muted)" id="accState">—</span></div>
+      <div id="accBox" class="linkbox" style="align-items:center">
+        <span class="code" id="accMasked">لم يُسجَّل بعد</span>
+        <span style="font-size:11.5px;color:var(--muted)" id="accHolder">—</span>
+      </div>
+      <div class="row2" style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><label style="font-size:11.5px;font-weight:800;color:var(--muted)">صاحب الحساب (كما في الدفتر)</label>
+          <input id="accHolderIn" placeholder="الاسم واللقب" style="width:100%;padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eaf0ff" /></div>
+        <div><label style="font-size:11.5px;font-weight:800;color:var(--muted)">مكتب البريد</label>
+          <input id="accAgencyIn" placeholder="بسكرة المركز" style="width:100%;padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eaf0ff" /></div>
+        <div><label style="font-size:11.5px;font-weight:800;color:var(--muted)">رقم CCP (10 أرقام أو RIP)</label>
+          <input id="accNumberIn" inputmode="numeric" placeholder="0012345678" style="width:100%;padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eaf0ff" /></div>
+        <div><label style="font-size:11.5px;font-weight:800;color:var(--muted)">مفتاح الحساب</label>
+          <input id="accKeyIn" inputmode="numeric" maxlength="2" placeholder="04" style="width:100%;padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eaf0ff" /></div>
+      </div>
+      <button class="btn primary" id="saveAcc" style="margin-top:10px">حفظ الحساب البريدي</button>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><span>التحويلات</span><span style="font-size:10.5px;color:var(--muted)" id="rateNote">—</span></div>
+      <div style="overflow:auto">
+        <table>
+          <thead><tr><th>التحويل</th><th>المبلغ</th><th>بالدينار</th><th>الوجهة</th><th>الحالة</th><th>الوصل</th><th>التاريخ</th></tr></thead>
+          <tbody id="payoutRows"><tr><td colspan="7" class="empty">لا تحويلات بعد — تُنفَّذ أسبوعيًا بعد تأكيد الحجوزات</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const money = (n) => new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(Number(n || 0)) + ' $';
+const toast = (m) => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2400); };
+let TOKEN = localStorage.getItem('maria_token') || '';
+
+const pill = (s) => {
+  const m = { confirmed: ['ok', 'مؤكَّد'], fulfilled: ['ok', 'منفَّذ'], pending: ['wait', 'بانتظار الدفع'], referred: ['wait', 'إحالة'], cancelled: ['no', 'ملغى'], refunded: ['no', 'مُسترجع'] };
+  const [c, l] = m[s] || ['wait', s];
+  return `<span class="pill ${c}">${l}</span>`;
+};
+
+async function load() {
+  if (!TOKEN) { $('#login').style.display = 'block'; return; }
+  try {
+    const res = await fetch('/api/partner/me', { headers: { authorization: 'Bearer ' + TOKEN } });
+    if (!res.ok) throw new Error('مفتاح غير صالح');
+    const s = await res.json();
+    $('#login').style.display = 'none';
+    $('#portal').style.display = 'block';
+    $('#logout').style.display = 'inline-block';
+    const badge = $('#statusBadge'); badge.style.display = 'inline-block';
+    badge.textContent = s.partner.status === 'active' ? '● مُفعّل' : '● قيد المراجعة';
+    badge.className = 'badge' + (s.partner.status === 'active' ? '' : ' pending');
+
+    $('#pName').textContent = s.partner.name;
+    $('#kBookings').textContent = s.confirmed;
+    $('#kGmv').textContent = money(s.gmv);
+    $('#kUnpaid').textContent = money(s.partnerUnpaid);
+    $('#kEarned').textContent = money(s.partnerEarnings);
+    $('#refLink').textContent = s.referralLink;
+    $('#kUnpaidDzd').textContent = (s.partnerUnpaidDzd != null ? dzd(s.partnerUnpaidDzd) : '—');
+    $('#rateNote').textContent = s.fxRate ? `سعر التحويل: 1$ = ${s.fxRate} دج` : '—';
+
+    /* الحساب البريدي */
+    const acc = s.payoutAccount;
+    if (acc) {
+      $('#accMasked').textContent = acc.masked || '—';
+      $('#accHolder').textContent = (acc.holderName || '') + (acc.agency ? ' · ' + acc.agency : '');
+      $('#accState').textContent = acc.source === 'env' ? 'مضبوط من الإعدادات' : 'محفوظ ✓';
+      $('#accHolderIn').value = acc.holderName || '';
+      $('#accAgencyIn').value = acc.agency || '';
+    } else {
+      $('#accMasked').textContent = 'لم يُسجَّل بعد';
+      $('#accState').textContent = 'مطلوب لاستلام العمولة';
+    }
+
+    /* التحويلات */
+    const res2 = await fetch('/api/payouts/account', { headers: { authorization: 'Bearer ' + TOKEN } });
+    const accData = await res2.json().catch(() => ({}));
+    if (accData.report) {
+      $('#kUnpaidDzd').textContent = dzd(accData.report.availableDzd);
+    }
+    loadPayouts();
+    $('#testLink').href = s.referralLink;
+    $('#lastUpd').textContent = 'آخر تحديث ' + new Date().toLocaleTimeString('ar-DZ');
+
+    $('#rows').innerHTML = s.recent.length ? s.recent.map(b => `
+      <tr><td style="font-family:ui-monospace,monospace;font-size:11px">${b.id.slice(-6)}</td>
+      <td>${b.vertical}</td><td>${b.title || '—'}</td>
+      <td>${money(b.basePrice)}</td><td>${money(b.fee)}</td>
+      <td class="amt">${money(b.partnerEarnings)}</td>
+      <td>${pill(b.status)}</td>
+      <td style="color:var(--muted);font-size:11px">${new Date(b.createdAt).toLocaleDateString('ar-DZ')}</td></tr>`).join('')
+      : '<tr><td colspan="8" class="empty">لا حجوزات بعد — شارك رابط الإحالة وابدأ</td></tr>';
+  } catch (e) {
+    localStorage.removeItem('maria_token');
+    TOKEN = '';
+    $('#login').style.display = 'block';
+    toast('انتهت الجلسة — سجّل الدخول');
+  }
+}
+
+$('#doLogin').addEventListener('click', async () => {
+  const key = $('#apiKey').value.trim();
+  if (key) { TOKEN = key; localStorage.setItem('maria_token', key); return load(); }
+  try {
+    const res = await fetch('/api/partner/login', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ code: $('#code').value.trim(), email: $('#email').value.trim() }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'بيانات غير صحيحة');
+    TOKEN = data.token; localStorage.setItem('maria_token', TOKEN);
+    toast('مرحبًا ' + data.name);
+    load();
+  } catch (e) { toast(e.message); }
+});
+
+$('#logout').addEventListener('click', () => {
+  localStorage.removeItem('maria_token'); TOKEN = '';
+  $('#portal').style.display = 'none'; $('#login').style.display = 'block';
+  $('#logout').style.display = 'none'; $('#statusBadge').style.display = 'none';
+});
+
+const dzd = (n) => new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(Number(n || 0)) + ' دج';
+
+async function loadPayouts() {
+  try {
+    const r = await fetch('/api/partner/payouts', { headers: { authorization: 'Bearer ' + TOKEN } });
+    if (!r.ok) return;
+    const { payouts } = await r.json();
+    const st = { pending: ['wait', 'بانتظار الحوالة'], sent: ['ok', 'تم التحويل'], paid: ['ok', 'مدفوع'] };
+    $('#payoutRows').innerHTML = (payouts || []).length ? payouts.map(p => {
+      const [c, l] = st[p.status] || ['wait', p.status];
+      return `<tr><td style="font-family:ui-monospace,monospace;font-size:11px">${p.id.slice(-6)}</td>
+        <td>${money(p.amountUsd)}</td><td class="amt">${dzd(p.amountDzd)}</td>
+        <td style="font-size:11px">${p.destination || '—'}</td>
+        <td><span class="pill ${c}">${l}</span></td>
+        <td style="font-size:11px;font-family:ui-monospace,monospace">${p.reference || '—'}</td>
+        <td style="color:var(--muted);font-size:11px">${new Date(p.createdAt).toLocaleDateString('ar-DZ')}</td></tr>`;
+    }).join('') : '<tr><td colspan="7" class="empty">لا تحويلات بعد</td></tr>';
+  } catch {}
+}
+
+$('#saveAcc').addEventListener('click', async () => {
+  const btn = $('#saveAcc'); btn.disabled = true; btn.textContent = 'جارٍ الحفظ…';
+  try {
+    const res = await fetch('/api/payouts/account', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: 'Bearer ' + TOKEN },
+      body: JSON.stringify({
+        method: 'ccp', holderName: $('#accHolderIn').value.trim(),
+        ccpNumber: $('#accNumberIn').value.trim(), ccpKey: $('#accKeyIn').value.trim(),
+        ccpAgency: $('#accAgencyIn').value.trim(),
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'تعذّر الحفظ');
+    toast('حُفظ حسابك البريدي: ' + data.account.masked);
+    load();
+  } catch (e) { toast(e.message); } finally { btn.disabled = false; btn.textContent = 'حفظ الحساب البريدي'; }
+});
+
+$('#copyLink').addEventListener('click', () => {
+  navigator.clipboard?.writeText($('#refLink').textContent).then(() => toast('نُسخ رابط الإحالة'));
+});
+
+load();
+setInterval(() => { if (TOKEN) { load(); loadPayouts(); } }, 15000);
+</script>
+</body>
+</html>

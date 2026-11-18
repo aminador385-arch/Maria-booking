@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>لوحة التشغيل والعمولات — ماريا 3%</title>
+<style>
+:root{
+  --bg:#060a12;--panel:rgba(255,255,255,.045);--panel2:rgba(255,255,255,.08);
+  --line:rgba(255,255,255,.10);--text:#eaf0ff;--muted:#8f9dbb;
+  --mint:#39e6c3;--violet:#7b6cff;--gold:#ffc36b;--pink:#ff6fa5;
+  --grad:linear-gradient(135deg,#39e6c3,#6d8bff 55%,#a06bff);
+  --font:"Segoe UI","Noto Kufi Arabic",Tahoma,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:
+ radial-gradient(760px 440px at 92% -10%,rgba(123,108,255,.24),transparent 62%),
+ radial-gradient(700px 420px at 2% 0%,rgba(57,230,195,.14),transparent 60%),
+ linear-gradient(180deg,#060a12,#070c16 50%,#05080f)}
+.wrap{width:min(1340px,95vw);margin-inline:auto}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+a{color:inherit;text-decoration:none}
+header{position:sticky;top:0;z-index:20;background:rgba(6,10,18,.84);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07)}
+.hd{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}
+.brand small{display:block;font-size:9.5px;letter-spacing:2px;color:var(--muted);font-weight:700;line-height:1}
+.hd-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{font-family:inherit;font-weight:800;font-size:12.5px;padding:8px 14px;border-radius:11px;border:1px solid var(--line);background:var(--panel);color:#cdd8f3;cursor:pointer;transition:.18s}
+.btn:hover{background:var(--panel2);transform:translateY(-1px)}
+.btn.primary{background:var(--grad);color:#04121a;border-color:transparent}
+.btn:disabled{opacity:.55;cursor:wait;transform:none}
+.btn.tiny{padding:3px 9px;font-size:10.5px;border-radius:8px}
+.badge{font-size:10.5px;font-weight:800;padding:5px 11px;border-radius:999px;border:1px solid rgba(255,195,107,.35);background:rgba(255,195,107,.14);color:var(--gold)}
+.badge.live{border-color:rgba(57,230,195,.4);background:rgba(57,230,195,.14);color:var(--mint)}
+h1{font-size:clamp(19px,2.3vw,26px);letter-spacing:-.7px;margin:18px 0 2px}
+.sub{color:var(--muted);font-size:12.5px;font-weight:600;margin-bottom:16px}
+.stack{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.chip{font-size:10.5px;font-weight:800;padding:4px 10px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:#c3cfe9}
+.chip b{color:var(--mint)}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}
+.kpi{background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:16px;padding:14px}
+.kpi span{font-size:11px;color:var(--muted);font-weight:700;display:block;margin-bottom:4px}
+.kpi b{font-size:20px;letter-spacing:-.8px;display:block;line-height:1.25}
+.kpi i{font-style:normal;font-size:10.5px;color:var(--mint);font-weight:800}
+.kpi.hl{background:linear-gradient(160deg,rgba(57,230,195,.16),rgba(123,108,255,.2));border-color:rgba(255,255,255,.18)}
+.grid{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;align-items:start;margin-bottom:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.card-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.07);font-size:12.5px;font-weight:800}
+.card-h em{font-style:normal;font-size:10.5px;color:var(--mint);background:rgba(57,230,195,.13);padding:2px 8px;border-radius:999px;border:1px solid rgba(57,230,195,.28)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:start;font-size:10.5px;color:var(--muted);font-weight:800;padding:9px 11px;border-bottom:1px solid rgba(255,255,255,.09);white-space:nowrap}
+td{padding:9px 11px;border-bottom:1px dashed rgba(255,255,255,.06);color:#c9d5ef;font-weight:600;white-space:nowrap}
+tr:last-child td{border:none}
+td.amt{color:var(--mint);font-weight:900}
+td.mut{color:var(--muted);font-size:11px}
+.pill{font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:rgba(57,230,195,.13);color:var(--mint);border:1px solid rgba(57,230,195,.3)}
+.pill.wait{background:rgba(255,195,107,.13);color:var(--gold);border:1px solid rgba(255,195,107,.3)}
+.pill.no{background:rgba(255,111,165,.13);color:var(--pink);border:1px solid rgba(255,111,165,.3)}
+.pill.ref{background:rgba(123,108,255,.16);color:#c3b8ff;border:1px solid rgba(123,108,255,.32)}
+.code{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;background:rgba(255,255,255,.06);border:1px solid var(--line);padding:2px 7px;border-radius:7px;color:#dfe8ff;cursor:pointer}
+.code:hover{background:rgba(57,230,195,.16);border-color:rgba(57,230,195,.4)}
+.form{padding:13px 16px;display:flex;flex-direction:column;gap:7px}
+.form label{font-size:10.5px;color:var(--muted);font-weight:800}
+.form input,.form select{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:8px 11px;color:var(--text);font-family:inherit;font-size:12px;outline:none}
+.form input:focus{border-color:rgba(57,230,195,.5)}
+.list{padding:8px 16px 14px}
+.lrow{display:flex;justify-content:space-between;gap:10px;font-size:11.5px;padding:6px 0;border-bottom:1px dashed rgba(255,255,255,.07)}
+.lrow:last-child{border:none}
+.lrow b{color:var(--mint);font-weight:900}
+.empty{padding:18px;text-align:center;color:var(--muted);font-size:11.5px;font-weight:700}
+.toast{position:fixed;bottom:16px;inset-inline-start:16px;z-index:50;background:linear-gradient(135deg,rgba(57,230,195,.96),rgba(109,139,255,.96));color:#04121a;font-weight:900;font-size:12.5px;padding:11px 17px;border-radius:12px;box-shadow:0 18px 40px -14px rgba(0,0,0,.8);opacity:0;transform:translateY(14px);transition:.28s;pointer-events:none;max-width:min(520px,90vw)}
+.toast.on{opacity:1;transform:none}
+.note{font-size:10.5px;color:var(--muted);padding:0 16px 13px;line-height:1.8}
+@media(max-width:1150px){.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap hd">
+    <a class="brand" href="/dashboard">
+      <svg width="32" height="32" viewBox="0 0 48 48" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="48" y2="48"><stop offset="0" stop-color="#39e6c3"/><stop offset=".55" stop-color="#6d8bff"/><stop offset="1" stop-color="#a06bff"/></linearGradient></defs><rect x="1.5" y="1.5" width="45" height="45" rx="14" fill="url(#g)" opacity=".16" stroke="url(#g)" stroke-width="2"/><path d="M24 20.5l1.9 4.6 4.6 1.9-4.6 1.9-1.9 4.6-1.9-4.6-4.6-1.9 4.6-1.9 1.9-4.6Z" fill="#fff"/></svg>
+      <span>ماريا<span style="font-weight:700"> — لوحة التشغيل</span><small>OPS · COMMISSIONS · PARTNERS</small></span>
+    </a>
+    <div class="hd-right">
+      <span class="badge" id="modeBadge">…</span>
+      <a class="btn" href="/join">تسجيل شريك</a>
+      <a class="btn" href="/partner">بوابة الشريك</a>
+      <button class="btn" id="btnDemo">+ حجز تجريبي</button>
+      <button class="btn" id="btnSeed">توليد 12</button>
+      <button class="btn primary" id="btnPayout">تشغيل التحويلات</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1>لوحة العمولات — <span class="grad-text">نموذج 3%</span></h1>
+  <p class="sub">كل رقم مُستخرج من دفتر القيود على Postgres: رسوم 3% من العميل + عمولة المزوّد − تكاليفه = صافي المنصة.</p>
+  <div class="stack" id="stack"></div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-h"><span>شبكة الشركاء</span><em id="partnersCount">—</em></div>
+      <div style="overflow:auto">
+        <table>
+          <thead><tr>
+            <th>الكود</th><th>الشريك</th><th>النوع</th><th>الحالة</th><th>حجوزات</th><th>مبيعات</th>
+            <th>رسوم 3%</th><th>حصته 1.5%</th><th>مستحق</th><th>صافي المنصة</th><th></th>
+          </tr></thead>
+          <tbody id="partnersBody"><tr><td colspan="11" class="empty">جارٍ التحميل…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <div class="card-h"><span>طلبات انضمام قيد المراجعة</span><em id="pendCount">0</em></div>
+        <div class="list" id="pendingList"><div class="empty">لا طلبات</div></div>
+        <p class="note">الموافقة تتطلّب رمز الإدارة (<span class="code">MARIA_ADMIN_TOKEN</span> — الافتراضي <b>dev-admin-token</b>).</p>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><span>القطاعات والربح</span><em>صافي المنصة</em></div>
+        <div class="list" id="verticals"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><span>البنية التحتية</span></div>
+        <div class="list" id="infra"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-h"><span>أحدث الحجوزات والقيود والمدفوعات</span><em id="lastUpdate">—</em></div>
+    <div style="overflow:auto">
+      <table>
+        <thead><tr>
+          <th>الحجز</th><th>الشريك</th><th>القطاع</th><th>العرض</th><th>سعر المزوّد</th><th>رسوم 3%</th>
+          <th>عمولة المزوّد</th><th>الشريك</th><th>صافي المنصة</th><th>الهامش</th><th>الدفع</th><th>الحالة</th><th></th>
+        </tr></thead>
+        <tbody id="bookingsBody"><tr><td colspan="13" class="empty">جارٍ التحميل…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-h"><span>📩 طلبات الحجز (العميل يطلب ونؤكّد)</span><em id="rqState">—</em></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+      <span class="chip">جديدة: <b id="rqNew">0</b></span>
+      <span class="chip">معتمدة: <b id="rqApproved">0</b></span>
+      <span class="chip">مرفوضة: <b id="rqRejected">0</b></span>
+      <span class="chip">النمط: <b id="rqMode">طلب</b></span>
+    </div>
+    <div style="overflow:auto;max-height:320px">
+      <table>
+        <thead><tr><th>الرقم</th><th>العميل</th><th>الخدمة</th><th>السعر</th><th>العمر</th><th>الحالة</th><th>قرار</th></tr></thead>
+        <tbody id="rqBody"><tr><td colspan="7" class="empty">لا طلبات بعد</td></tr></tbody>
+      </table>
+    </div>
+    <p class="note">العميل لا يدفع أي شيء قبل موافقتك. «موافقة» تُنشئ حجزًا وترسل له رابط دفع. الطلبات غير المُبتّة تُغلق تلقائيًا بعد المدة المحدّدة.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-h"><span>✉️ صندوق الرسائل (البريد للعملاء والشركاء)</span><em id="obState">—</em></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+      <span class="chip">الناقل: <b id="obProvider">—</b></span>
+      <span class="chip">مُرسلة: <b id="obSent">0</b></span>
+      <span class="chip">قيد الإرسال: <b id="obQueued">0</b></span>
+      <span class="chip">فاشلة: <b id="obFailed">0</b></span>
+    </div>
+    <div style="overflow:auto;max-height:280px">
+      <table>
+        <thead><tr><th>إلى</th><th>الموضوع</th><th>القالب</th><th>الحالة</th><th>التاريخ</th><th></th></tr></thead>
+        <tbody id="outboxBody"><tr><td colspan="6" class="empty">لا رسائل بعد</td></tr></tbody>
+      </table>
+    </div>
+    <p class="note">كل رسالة تُحفظ قبل الإرسال — إن فشل البريد لا يتأثّر أي حجز. اضغط «إعادة» لمحاولة أخرى.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-h"><span>💰 عمولتي إلى الحساب البريدي (CCP)</span><em id="ccpState">—</em></div>
+    <div class="kpis" style="grid-template-columns:repeat(3,1fr);margin-bottom:12px">
+      <div class="kpi hl"><span>متاح للتحويل</span><b class="grad-text" id="ccpAvail">0 $</b><i id="ccpAvailDzd">— دج</i></div>
+      <div class="kpi"><span>سعر التحويل</span><b id="ccpRate">—</b><i>يمكن تغييره بـ DZD_PER_USD</i></div>
+      <div class="kpi"><span>الحساب البريدي</span><b id="ccpMasked" style="font-size:15px">—</b><i id="ccpAgency">—</i></div>
+    </div>
+    <div class="row2" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px">
+      <input id="ccpHolder" placeholder="صاحب الحساب" style="padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eaf0ff" />
+      <input id="ccpNumber" inputmode="numeric" placeholder="رقم CCP / RIP" style="padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eaf0ff" />
+      <input id="ccpKey" inputmode="numeric" maxlength="2" placeholder="المفتاح" style="padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eaf0ff" />
+      <input id="ccpAgencyIn" placeholder="مكتب البريد" style="padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eaf0ff" />
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="btn" id="btnSaveCcp">حفظ الحساب البريدي</button>
+      <button class="btn primary" id="btnPlatformPayout">تحويل عمولتي إلى CCP</button>
+      <input id="ccpRef" placeholder="رقم وصل الحوالة (بعد مكتب البريد)" style="padding:9px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#eaf0ff;flex:1;min-width:200px" />
+      <button class="btn" id="btnConfirmCcp">تأكيد التحويل</button>
+      <a class="btn" href="/api/payouts/statement.csv" id="btnCsv">كشف CSV ⤓</a>
+    </div>
+    <p class="note" id="ccpNote"></p>
+  </div>
+
+  <div class="card" style="margin-bottom:32px">
+    <div class="card-h"><span>التحويلات المنفَّذة (شركاء + المنصة)</span></div>
+    <div style="overflow:auto">
+      <table>
+        <thead><tr><th>المعرّف</th><th>المستفيد</th><th>المبلغ</th><th>بالدينار</th><th>الوجهة (CCP)</th><th>الوصل</th><th>الحجوزات</th><th>التاريخ</th><th>الحالة</th></tr></thead>
+        <tbody id="payoutsBody"><tr><td colspan="9" class="empty">لا تحويلات بعد</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const state = { snapshot: false };
+const EMPTY = { mode:'mock', model:{ feeRate:0.03, partnerCut:0.5 }, payments:{ provider:'—', db:'—' },
+  bookings:0, confirmed:0, gmv:0, customerFees:0, supplierCommission:0, providerCost:0, platformNet:0,
+  partnersPaid:0, partnersUnpaid:0, effectiveMarginPct:0, byVertical:{}, partners:[], pendingPartners:[],
+  payouts:[], recent:[], adapters:{ duffel:{live:false}, viator:{live:false} } };
+let ADMIN = localStorage.getItem('maria_admin') || 'dev-admin-token';
+
+const money = (n, c = 'USD') => new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(Number(n || 0)) + ' ' + (c === 'USD' ? '$' : c);
+const num = (n) => new Intl.NumberFormat('en-US').format(Number(n || 0));
+const toast = (m) => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2800); };
+
+const statusPill = (s) => {
+  const m = { confirmed: ['ok', 'مؤكَّد'], fulfilled: ['ok', 'منفَّذ'], pending: ['wait', 'بانتظار الدفع'], referred: ['ref', 'إحالة'], cancelled: ['no', 'ملغى'], refunded: ['no', 'مُسترجع'], succeeded: ['ok', 'ناجح'], requires_action: ['wait', 'بانتظار 3DS'], failed: ['no', 'فاشل'] };
+  const [c, l] = m[s] || ['wait', s];
+  return `<span class="pill ${c}">${l}</span>`;
+};
+const partnerPill = (s) => s === 'active'
+  ? '<span class="pill ok">مُفعّل</span>'
+  : s === 'pending' ? '<span class="pill wait">قيد المراجعة</span>' : '<span class="pill no">موقوف</span>';
+
+async function api(path, opts) {
+  const res = await fetch(path, { headers: { 'content-type': 'application/json', authorization: 'Bearer ' + ADMIN }, ...opts });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+  return data;
+}
+
+function renderAll(s, isSnapshot) {
+  const p = s.payments || {};
+  $('#modeBadge').textContent = isSnapshot
+    ? '● لقطة ثابتة — شغّل الخادم'
+    : (s.mode === 'live' ? '● LIVE' : '● تجريبي (MOCK)');
+  $('#modeBadge').classList.toggle('live', !isSnapshot);
+
+  $('#stack').innerHTML = `
+    <span class="chip">قاعدة البيانات: <b>${p.db || 'Postgres (PGlite)'}</b></span>
+    <span class="chip">المدفوعات: <b>${p.provider || 'sandbox'}</b></span>
+    <span class="chip">Duffel: <b>${s.adapters?.duffel?.live ? 'LIVE' : 'MOCK'}</b></span>
+    <span class="chip">Viator: <b>${s.adapters?.viator?.live ? 'LIVE' : 'MOCK'}</b></span>
+    <span class="chip">النموذج: <b>رسوم 3% · شريك 1.5%</b></span>
+    <span class="chip" id="legalChip">الهوية القانونية: <b>—</b></span>`;
+  fetch('/api/legal').then(r => r.json()).then(d => {
+    const l = d.legal || {};
+    const el = $('#legalChip');
+    if (!el) return;
+    el.innerHTML = l.ready
+      ? `الهوية القانونية: <b>جاهزة</b> · RC ${l.rc} · NIF ${l.nif}`
+      : `الهوية القانونية: <b style="color:#f59e0b">ناقصة</b> — ${(l.missing || []).join(' · ')}`;
+  }).catch(() => {});
+
+  $('#kpis').innerHTML = `
+    <div class="kpi"><span>حجم المبيعات</span><b>${money(s.gmv)}</b><i>${num(s.confirmed)} حجز مؤكَّد</i></div>
+    <div class="kpi"><span>رسوم 3%</span><b>${money(s.customerFees)}</b><i>محصّلة من العملاء</i></div>
+    <div class="kpi"><span>عمولة المزوّدين</span><b>${money(s.supplierCommission)}</b><i>− تكاليف ${money(s.providerCost)}</i></div>
+    <div class="kpi hl"><span>صافي المنصة</span><b class="grad-text">${money(s.platformNet)}</b><i>هامش فعلي ${s.effectiveMarginPct}%</i></div>
+    <div class="kpi"><span>مستحق للشركاء</span><b>${money(s.partnersUnpaid)}</b><i>محوَّل: ${money(s.partnersPaid)}</i></div>`;
+
+  $('#partnersCount').textContent = (s.partners || []).length + ' شريك';
+  $('#partnersBody').innerHTML = (s.partners || []).map(pt => `
+    <tr>
+      <td><span class="code" data-copy="${location.origin}/?ref=${pt.code}">${pt.code}</span></td>
+      <td>${pt.name}</td>
+      <td class="mut">${pt.type}</td>
+      <td>${partnerPill(pt.status)}</td>
+      <td>${num(pt.bookings)}</td>
+      <td>${money(pt.gmv)}</td>
+      <td class="amt">${money(pt.fees)}</td>
+      <td>${money(pt.partnerEarnings)}</td>
+      <td>${pt.partnerUnpaid > 0 ? '<span class="pill wait">' + money(pt.partnerUnpaid) + '</span>' : '<span class="pill ok">مسدَّد</span>'}</td>
+      <td>${money(pt.platformNet)}</td>
+      <td><button class="btn tiny" data-copy="${location.origin}/?ref=${pt.code}">رابط</button></td>
+    </tr>`).join('') || '<tr><td colspan="11" class="empty">لا شركاء</td></tr>';
+
+  const pend = s.pendingPartners || [];
+  $('#pendCount').textContent = pend.length;
+  $('#pendingList').innerHTML = pend.length ? pend.map(p2 => `
+    <div class="lrow"><span>${p2.name}<br><span class="mut" style="font-size:10.5px;color:var(--muted)">${p2.email || ''} · ${p2.type}</span></span>
+      <button class="btn tiny" onclick="approve('${p2.code}')">موافقة</button></div>`).join('')
+    : '<div class="empty">لا طلبات قيد المراجعة</div>';
+
+  $('#verticals').innerHTML = Object.entries(s.byVertical || {}).map(([, v]) => `
+    <div class="lrow"><span>${v.name} <span style="color:var(--muted);font-size:10.5px">(${num(v.bookings)})</span></span><b>${money(v.platformNet)}</b></div>`).join('');
+
+  $('#infra').innerHTML = `
+    <div class="lrow"><span>Postgres / PGlite</span><b>${p.db || 'pglite'}</b></div>
+    <div class="lrow"><span>مزوّد المدفوعات</span><b>${p.provider || 'sandbox'}</b></div>
+    <div class="lrow"><span>Webhook secret</span><b>${p.webhookSecretSet ? 'مضبوط' : 'غير مضبوط'}</b></div>
+    <div class="lrow"><span>Duffel</span><b>${s.adapters?.duffel?.live ? 'LIVE' : 'MOCK'}</b></div>
+    <div class="lrow"><span>Viator</span><b>${s.adapters?.viator?.live ? 'LIVE' : 'MOCK'}</b></div>`;
+
+  $('#lastUpdate').textContent = 'آخر تحديث ' + new Date().toLocaleTimeString('ar-DZ');
+  $('#bookingsBody').innerHTML = (s.recent || []).length ? s.recent.map(b => `
+    <tr>
+      <td><span class="code">${b.id.slice(-6)}</span></td>
+      <td>${b.partnerName || b.ref}</td>
+      <td class="mut">${b.vertical}</td>
+      <td>${b.title || '—'}</td>
+      <td>${money(b.basePrice)}</td>
+      <td class="amt">${money(b.fee)}</td>
+      <td>${money(b.supplier)}</td>
+      <td class="amt">${money(b.partnerEarnings)}</td>
+      <td class="amt">${money(b.platformNet)}</td>
+      <td class="mut">${b.netPct}%</td>
+      <td>${b.payment ? statusPill(b.payment.status) : '<span class="pill no">بلا دفع</span>'}</td>
+      <td>${statusPill(b.status)}</td>
+      <td style="white-space:nowrap">${b.status === 'confirmed' ? `<button class="btn tiny" onclick="issueInvoice('${b.id}')">فاتورة</button> ` : ''}${['confirmed', 'pending', 'referred'].includes(b.status) ? `<button class="btn tiny" onclick="cancelBooking('${b.id}')">إلغاء</button>` : ''}</td>
+    </tr>`).join('') : '<tr><td colspan="13" class="empty">لا حجوزات بعد — اضغط «حجز تجريبي»</td></tr>';
+
+  $('#payoutsBody').innerHTML = (s.payouts || []).length ? s.payouts.map(po => `
+    <tr><td><span class="code">${po.id.slice(-6)}</span></td>
+    <td>${po.ownerType === 'platform' ? '<b>المنصة (أنت)</b>' : po.partnerName}</td>
+    <td class="amt">${money(po.amount)}</td><td class="amt">${po.amountDzd != null ? dzd(po.amountDzd) : '—'}</td>
+    <td class="mut" style="font-size:11px">${po.destination || '—'}</td>
+    <td style="font-family:ui-monospace,monospace;font-size:11px">${po.reference || '—'}</td>
+    <td>${po.bookings}</td>
+    <td class="mut">${new Date(po.createdAt).toLocaleDateString('ar-DZ')}</td>
+    <td>${po.status === 'sent' ? '<span class="pill ok">حُوِّل</span>' : po.status === 'pending' ? '<span class="pill wait">بانتظار الحوالة</span>' : statusPill(po.status)}</td></tr>`).join('')
+    : '<tr><td colspan="9" class="empty">لا تحويلات بعد</td></tr>';
+  if (s.payouts && s.payouts.length) window.__lastPayout = s.payouts.find(x => x.status === 'pending') || null;
+
+  loadRequests();
+
+  /* صندوق الرسائل */
+  const ob = s.outbox || { counts: {}, recent: [], mailer: {} };
+  $('#obProvider').textContent = (ob.mailer?.provider || '—') + (ob.mailer?.live ? ' (حقيقي)' : ' (تطوير)');
+  $('#obSent').textContent = ob.counts?.sent ?? 0;
+  $('#obQueued').textContent = ob.counts?.queued ?? 0;
+  $('#obFailed').textContent = ob.counts?.failed ?? 0;
+  $('#obState').textContent = ob.counts?.failed ? 'توجد رسائل فاشلة' : 'سليم';
+  const stMail = { sent: ['ok', 'مُرسلة'], queued: ['wait', 'قيد الإرسال'], failed: ['no', 'فاشلة'] };
+  $('#outboxBody').innerHTML = (ob.recent || []).length ? ob.recent.map(m => {
+    const [c, l] = stMail[m.status] || ['wait', m.status];
+    return `<tr>
+      <td style="font-size:11.5px;direction:ltr;text-align:left">${m.to}</td>
+      <td style="font-size:12px">${m.subject}</td>
+      <td class="mut" style="font-size:10.5px">${m.template || '—'}</td>
+      <td><span class="pill ${c}">${l}</span></td>
+      <td class="mut" style="font-size:10.5px">${new Date(m.createdAt).toLocaleTimeString('ar-DZ')}</td>
+      <td style="white-space:nowrap">
+        <button class="btn tiny" onclick="viewMail('${m.id}')">عرض</button>
+        <button class="btn tiny" onclick="resendMail('${m.id}')">إعادة</button>
+      </td></tr>`;
+  }).join('') : '<tr><td colspan="6" class="empty">لا رسائل بعد — تُرسل تلقائيًا عند كل حجز</td></tr>';
+}
+
+async function refresh() {
+  try {
+    const [summary, health] = await Promise.all([api('/api/summary'), fetch('/api/health').then(r => r.json())]);
+    summary.payments = { ...(summary.payments || {}), db: health.db?.kind || 'pglite' };
+    state.snapshot = false;
+    loadCcp();
+    renderAll(summary, false);
+  } catch (e) {
+    if (!state.snapshot) {
+      state.snapshot = true;
+      renderAll(EMPTY, true);
+      const banner = document.createElement('div');
+      banner.style.cssText = 'margin:14px 0;padding:12px 16px;border-radius:14px;background:rgba(255,195,107,.12);border:1px solid rgba(255,195,107,.35);color:#ffd9a3;font-size:12.5px;font-weight:700;line-height:1.8';
+      banner.innerHTML = 'أنت تعرض الملف مباشرة (بلا خادم). <b>افتح المعاينة الحيّة للخادم (المنفذ 4173)</b> لترى الأرقام الفعلية من Postgres، أو شغّل: <code style="font-family:monospace">cd server &amp;&amp; npm install &amp;&amp; npm start</code>';
+      document.querySelector('.wrap').prepend(banner);
+      toast('لا خادم على هذه الصفحة — افتح المعاينة الحيّة للمنفذ 4173');
+    }
+  }
+}
+
+async function withBusy(btn, fn) {
+  if (btn.disabled) return;
+  const old = btn.textContent; btn.disabled = true; btn.textContent = '…';
+  try { await fn(); } catch (e) { toast('خطأ: ' + e.message); }
+  finally { btn.disabled = false; btn.textContent = old; }
+}
+
+$('#btnDemo').addEventListener('click', (e) => withBusy(e.target, async () => {
+  const r = await api('/api/demo/booking', { method: 'POST', body: '{}' });
+  toast(`حجز ${r.booking.vertical} · دفع ${r.payment.status} · صافي ${money(r.booking.pricing.platformNet)}`);
+  await refresh();
+}));
+$('#btnSeed').addEventListener('click', (e) => withBusy(e.target, async () => {
+  const r = await api('/api/demo/seed', { method: 'POST', body: JSON.stringify({ count: 12 }) });
+  toast('أُضيف ' + r.created + ' حجزًا');
+  await refresh();
+}));
+const dzd = (n) => new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(Number(n || 0)) + ' دج';
+
+async function loadRequests() {
+  try {
+    const r = await api('/api/requests?limit=40');
+    const c = r.counts || {};
+    $('#rqNew').textContent = c.new ?? 0;
+    $('#rqApproved').textContent = c.approved ?? 0;
+    $('#rqRejected').textContent = (c.rejected ?? 0) + (c.expired ?? 0);
+    $('#rqMode').textContent = r.mode === 'request' ? 'طلب' : 'فوري';
+    $('#rqState').textContent = c.new ? `${c.new} بانتظار قرارك` : 'لا معلّق';
+
+    const pill = { new: ['wait', 'جديد'], approved: ['ok', 'معتمد'], rejected: ['no', 'مرفوض'], expired: ['no', 'منتهٍ'], cancelled: ['no', 'ملغى'] };
+    const rows = (r.requests || []).filter(x => ['new', 'approved', 'rejected'].includes(x.status)).slice(0, 20);
+    $('#rqBody').innerHTML = rows.length ? rows.map(q => {
+      const [cls, lbl] = pill[q.status] || ['wait', q.status];
+      const price = q.offer?.price ? money(q.offer.price, q.offer.currency || 'USD') : '—';
+      const actions = q.status === 'new'
+        ? `<button class="btn tiny" onclick="approveReq('${q.code}')">موافقة</button>
+           <button class="btn tiny" onclick="rejectReq('${q.code}')">رفض</button>`
+        : q.status === 'approved' && q.payUrl ? `<button class="btn tiny" onclick="window.open('${q.payUrl}','_blank')">رابط الدفع</button>` : '—';
+      return `<tr>
+        <td style="font-family:monospace;font-size:11.5px;color:#39e6c3">${q.code}</td>
+        <td style="font-size:12px">${q.customer?.name || '—'}<div class="mut" style="font-size:10.5px;direction:ltr;text-align:right">${q.customer?.phone || ''} · ${q.customer?.email || ''}</div></td>
+        <td style="font-size:11.5px">${q.offer?.title || '—'}</td>
+        <td style="font-size:11.5px">${price}</td>
+        <td class="mut" style="font-size:10.5px">${q.elapsedHours}س${q.status === 'new' ? ' / ' + q.expiresInHours + 'س' : ''}</td>
+        <td><span class="pill ${cls}">${lbl}</span></td>
+        <td style="white-space:nowrap">${actions}</td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="7" class="empty">لا طلبات بعد — تُنشأ من صفحة الحجز</td></tr>';
+  } catch (e) { /* تجاهل */ }
+}
+
+async function approveReq(code) {
+  const note = prompt('ملاحظة للعميل (اختياري) — مثل: السعر مثبَّت، الأمتعة 23كغ', 'متوفّر — السعر مثبَّت');
+  if (note === null) return;
+  try {
+    const r = await api('/api/requests/' + code + '/approve', { method: 'POST', body: JSON.stringify({ adminNote: note }) });
+    toast('تمت الموافقة — أُرسل رابط الدفع للعميل ✓');
+    loadRequests();
+    refresh();
+  } catch (e) { toast('خطأ: ' + e.message); }
+}
+
+async function rejectReq(code) {
+  const reason = prompt('سبب الرفض (يُرسل للعميل بصراحة)', 'غير متوفّر في هذا التاريخ');
+  if (!reason) return;
+  try {
+    await api('/api/requests/' + code + '/reject', { method: 'POST', body: JSON.stringify({ reason }) });
+    toast('رُفض الطلب وأُبلغ العميل بلا أي دفع');
+    loadRequests();
+  } catch (e) { toast('خطأ: ' + e.message); }
+}
+
+async function loadCcp() {
+  try {
+    const r = await api('/api/payouts/platform');
+    $('#ccpAvail').textContent = money(r.available);
+    $('#ccpAvailDzd').textContent = dzd(r.availableDzd);
+    $('#ccpRate').textContent = '1$ = ' + r.rate + ' دج';
+    const d = r.destination;
+    if (d) {
+      $('#ccpMasked').textContent = d.masked || '—';
+      $('#ccpAgency').textContent = (d.holderName || '') + (d.agency ? ' · ' + d.agency : '');
+      $('#ccpState').textContent = d.source === 'env' ? 'من الإعدادات' : 'محفوظ ✓';
+      if (d.holderName) $('#ccpHolder').value = d.holderName;
+      if (d.agency) $('#ccpAgencyIn').value = d.agency;
+      $('#ccpNote').textContent = 'سجّل رقم CCP ومفتاحه مرة واحدة؛ كل تحويل لاحق يذهب إليه تلقائيًا.';
+    } else {
+      $('#ccpMasked').textContent = 'لم يُسجَّل';
+      $('#ccpAgency').textContent = '—';
+      $('#ccpState').textContent = 'مطلوب';
+      $('#ccpNote').textContent = r.blocked || '';
+    }
+  } catch (e) { /* الوضع اللقطات */ }
+}
+
+$('#btnSaveCcp').addEventListener('click', (e) => withBusy(e.target, async () => {
+  try {
+    const r = await api('/api/payouts/account', {
+      method: 'POST',
+      body: JSON.stringify({
+        ownerType: 'platform', method: 'ccp',
+        holderName: $('#ccpHolder').value.trim(), ccpNumber: $('#ccpNumber').value.trim(),
+        ccpKey: $('#ccpKey').value.trim(), ccpAgency: $('#ccpAgencyIn').value.trim(), verified: true,
+      }),
+    });
+    toast('حُفظ الحساب البريدي: ' + r.account.masked);
+    await loadCcp();
+  } catch (err) { toast('خطأ: ' + err.message); }
+}));
+
+$('#btnPlatformPayout').addEventListener('click', (e) => withBusy(e.target, async () => {
+  try {
+    const r = await api('/api/payouts/platform/run', { method: 'POST', body: '{}' });
+    toast(r.payout ? `تحويل جاهز: ${money(r.payout.amount)} = ${dzd(r.payout.amount_dzd)}` : (r.message || 'لا رصيد'));
+    await refresh(); await loadCcp();
+  } catch (err) { toast('خطأ: ' + err.message); }
+}));
+
+$('#btnConfirmCcp').addEventListener('click', (e) => withBusy(e.target, async () => {
+  const ref = $('#ccpRef').value.trim();
+  if (!ref) return toast('أدخل رقم وصل الحوالة');
+  const pending = window.__lastPayout;
+  if (!pending) return toast('لا تحويل بانتظار التأكيد');
+  try {
+    const r = await api('/api/payouts/' + pending.id + '/confirm', { method: 'POST', body: JSON.stringify({ reference: ref }) });
+    toast('تم تأكيد التحويل: ' + r.payout.reference);
+    $('#ccpRef').value = '';
+    await refresh(); await loadCcp();
+  } catch (err) { toast('خطأ: ' + err.message); }
+}));
+
+$('#btnCsv').addEventListener('click', (e) => {
+  /* التصدير يحتاج رمز الإدارة في الترويسة */
+  e.preventDefault();
+  fetch('/api/payouts/statement.csv', { headers: { authorization: 'Bearer ' + ADMIN } })
+    .then(r => r.blob()).then(b => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(b); a.download = 'ccp-payouts.csv'; a.click();
+      toast('نُزِّل الكشف');
+    }).catch(() => toast('تعذّر التصدير'));
+});
+
+$('#btnPayout').addEventListener('click', (e) => withBusy(e.target, async () => {
+  const r = await api('/api/payouts/run', { method: 'POST', body: '{}' });
+  toast(r.count ? `نُفِّذت ${r.count} تحويلًا` : 'لا مستحقات الآن');
+  await refresh();
+}));
+
+function viewMail(id) {
+  window.open('/outbox/' + id + '?t=' + encodeURIComponent(ADMIN), '_blank');
+}
+
+async function resendMail(id) {
+  try {
+    const r = await api('/api/outbox/' + id + '/resend', { method: 'POST', body: '{}' });
+    toast(r.message.status === 'sent' ? 'أُعيد الإرسال ✓' : 'فشل: ' + (r.message.error || ''));
+    refresh();
+  } catch (e) { toast('خطأ: ' + e.message); }
+}
+
+async function issueInvoice(bookingId) {
+  try {
+    const r = await api('/api/bookings/' + bookingId + '/invoice', { method: 'POST', body: '{}' });
+    const num = r.invoice.number;
+    toast('فاتورة ' + num + ' — جاهزة للطباعة');
+    window.open('/invoice/' + encodeURIComponent(num) + '?t=' + encodeURIComponent(ADMIN), '_blank');
+    refresh();
+  } catch (e) { toast('تعذّرت الفوترة: ' + e.message); }
+}
+
+async function approve(code) {
+  try {
+    await api('/api/partners/' + code + '/approve', { method: 'POST', body: '{}' });
+    toast('تم تفعيل ' + code);
+    await refresh();
+  } catch (e) {
+    const t = prompt('رمز الإدارة مطلوب:', ADMIN);
+    if (t) { ADMIN = t; localStorage.setItem('maria_admin', t); toast('حُفظ الرمز — أعد المحاولة'); }
+  }
+}
+async function cancelBooking(id) {
+  try { await api('/api/bookings/' + id + '/status', { method: 'POST', body: JSON.stringify({ status: 'cancelled', reason: 'إلغاء من اللوحة' }) }); toast('أُلغي الحجز وتم الاسترداد'); await refresh(); }
+  catch (e) { toast('تعذّر الإلغاء: ' + e.message); }
+}
+function copyLink(link) { navigator.clipboard?.writeText(link).then(() => toast('نُسخ: ' + link)).catch(() => toast(link)); }
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-copy]');
+  if (el) copyLink(el.dataset.copy);
+});
+
+refresh();
+setInterval(() => { if (!state.snapshot) refresh(); }, 5000);
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "name": "maria-booking-engine",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ماريا — محرّك حجز عالمي: Postgres + مدفوعات + إحالات شركاء + نموذج 3%",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node test/selftest.mjs",
+    "test:duffel": "node test/duffel.live.mjs",
+    "duffel:sim": "node src/tools/duffel-sim.js",
+    "db:seed": "node src/tools/seed.js",
+    "chargily:check": "node test/chargily-check.mjs",
+    "chargily:live": "node test/chargily-check.mjs --live",
+    "duffel:check": "node test/duffel-check.mjs",
+    "duffel:live": "node test/duffel-check.mjs --live"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.5.13",
+    "pg": "^8.23.1"
+  }
+}

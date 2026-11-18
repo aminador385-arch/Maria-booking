@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>الدفع — ماريا</title>
+<style>
+  :root{--bg:#070b14;--card:#0e1626;--line:#1c2942;--ink:#eaf0ff;--muted:#8a97b4;--mint:#39e6c3;--blue:#6d8bff;--pink:#ff6fa5;--gold:#ffc75a}
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1100px 600px at 80% -10%,#12203a 0%,var(--bg) 60%);color:var(--ink);
+       font-family:'Segoe UI',Tahoma,system-ui,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px}
+  .wrap{width:100%;max-width:560px}
+  .brand{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:18px}
+  .logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--mint),var(--blue));
+        display:grid;place-items:center;font-weight:900;color:#04121a;font-size:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 24px 60px rgba(0,0,0,.45)}
+  h1{font-size:16.5px;margin:0 0 3px}
+  .sub{color:var(--muted);font-size:12.5px;margin:0 0 16px}
+  .row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #16223a;font-size:13px}
+  .row span{color:var(--muted)}
+  .row.total b{font-size:16px;color:var(--mint)}
+  label{display:block;font-size:12px;color:var(--muted);margin:13px 0 6px;font-weight:700}
+  input{width:100%;background:#0a1322;border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--ink);
+        font-size:14.5px;font-family:inherit;letter-spacing:1px}
+  input:focus{outline:none;border-color:var(--mint)}
+  .two{display:flex;gap:10px}
+  button{width:100%;margin-top:18px;padding:14px;border:0;border-radius:12px;cursor:pointer;font-family:inherit;
+         font-weight:900;font-size:15px;background:linear-gradient(135deg,var(--mint),var(--blue));color:#04121a}
+  button:disabled{opacity:.55;cursor:default}
+  .note{background:#0a1322;border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:12px;color:#a9b6d0;margin-top:14px;line-height:1.75}
+  .lock{display:flex;align-items:center;gap:6px;justify-content:center;color:var(--muted);font-size:11.5px;margin-top:12px}
+  .done{text-align:center;padding:10px 0}
+  .done .tick{width:64px;height:64px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;font-size:30px;
+              background:rgba(57,230,195,.14);color:var(--mint);border:2px solid rgba(57,230,195,.45)}
+  .done b{font-size:17px;display:block}
+  .done p{color:var(--muted);font-size:12.5px;line-height:1.8;margin:8px 0 0}
+  .ref{font-family:monospace;letter-spacing:2px;background:#0a1322;border:1px dashed var(--line);border-radius:11px;padding:10px;margin:14px 0;font-size:15px;font-weight:800;color:var(--gold)}
+  .err{color:var(--pink);font-size:12.5px;margin-top:12px;text-align:center;min-height:16px}
+  a.btn{display:block;text-align:center;text-decoration:none;background:linear-gradient(135deg,var(--mint),var(--blue));
+        color:#04121a;font-weight:900;padding:13px;border-radius:12px;margin-top:14px;font-size:14px}
+  .foot{text-align:center;color:#5b6780;font-size:11px;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><div class="logo">M</div><b style="font-size:19px">ماريا</b></div>
+  <div class="card" id="app"><p class="sub">جارٍ التحميل…</p></div>
+  <div class="foot" id="foot"></div>
+</div>
+<script>
+const $ = (s) => document.querySelector(s);
+const bookingId = new URLSearchParams(location.search).get('booking');
+const money = (v, c) => (Number(v) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ' + (c || 'USD');
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+async function load() {
+  if (!bookingId) { $('#app').innerHTML = '<h1>رابط غير صالح</h1><p class="sub">افتح الرابط الذي وصلك في البريد.</p>'; return; }
+  const r = await fetch('/api/pay/' + encodeURIComponent(bookingId));
+  const d = await r.json();
+  if (!r.ok) { $('#app').innerHTML = '<h1>حجز غير موجود</h1><p class="sub">' + esc(d.error) + '</p>'; return; }
+  if (d.payment && d.payment.paid) return renderDone(d);
+  renderPay(d);
+}
+
+function renderPay(d) {
+  const p = d.payment;
+  $('#app').innerHTML = `
+    <h1>${d.icon} ${esc(d.verticalName)} — إتمام الدفع</h1>
+    <p class="sub">${esc(d.offer?.title || '')} · ${esc(d.offer?.subtitle || '')}</p>
+    <div class="row"><span>سعر المزوّد</span><b>${money(d.pricing.basePrice, d.pricing.currency)}</b></div>
+    <div class="row"><span>رسوم الخدمة (3%)</span><b>${money(d.pricing.platformFee, d.pricing.currency)}</b></div>
+    <div class="row total"><span>الإجمالي</span><b>${money(d.pricing.customerTotal, d.pricing.currency)}</b></div>
+    ${p ? `
+      <label>رقم البطاقة</label>
+      <input id="num" inputmode="numeric" placeholder="4242 4242 4242 4242" value="4242 4242 4242 4242">
+      <div class="two">
+        <div style="flex:1"><label>الانتهاء</label><input id="exp" placeholder="12/29" value="12/29"></div>
+        <div style="flex:1"><label>CVV</label><input id="cvv" inputmode="numeric" placeholder="123" value="123"></div>
+      </div>
+      <button id="payBtn">ادفع ${money(d.pricing.customerTotal, d.pricing.currency)}</button>
+      <div class="lock">🔒 الدفع مؤمَّن — لا نحفظ رقم بطاقتك</div>
+      <div class="err" id="err"></div>
+      <div class="note">بإتمامك الدفع تُوافق على شروط الحجز. رسوم الخدمة 3% ظاهرة أعلاه بلا إخفاء.</div>
+    ` : '<div class="note">لا توجد دفعة معلّقة على هذا الحجز.</div>'}`;
+  $('#foot').textContent = d.payment?.provider === 'sandbox' ? 'وضع تجريبي — لن يُخصم أي مبلغ حقيقي' : '';
+  const btn = $('#payBtn');
+  if (btn) btn.onclick = () => payNow(p);
+}
+
+async function payNow(p) {
+  const btn = $('#payBtn'); btn.disabled = true; btn.textContent = 'جارٍ الدفع…';
+  $('#err').textContent = '';
+  try {
+    const r = await fetch('/api/payments/' + encodeURIComponent(p.id) + '/confirm', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ threeDS: 'success', cardLast4: ($('#num').value || '').replace(/\s/g, '').slice(-4) }),
+    });
+    const d = await r.json();
+    if (!r.ok || d.ok === false) throw new Error(d.error || d.reason || 'فشل الدفع');
+    renderDone({ bookingId, verticalName: 'حجزك', offer: {}, pricing: {}, payment: { paid: true }, status: d.booking?.status });
+    load2(d);
+  } catch (e) {
+    btn.disabled = false; btn.textContent = 'ادفع مرة أخرى';
+    $('#err').textContent = e.message;
+  }
+}
+
+async function load2() { setTimeout(async () => { const r = await fetch('/api/pay/' + encodeURIComponent(bookingId)); const d = await r.json(); if (r.ok) renderDone(d); }, 1200); }
+
+function renderDone(d) {
+  $('#app').innerHTML = `
+    <div class="done">
+      <div class="tick">✓</div>
+      <b>تم الدفع — حجزك مؤكَّد</b>
+      <p>أرسلنا التأكيد والفاتورة إلى بريدك.<br>احفظ رقم الحجز:</p>
+      <div class="ref">${esc(String(d.bookingId).slice(-10))}</div>
+      <p>إن احتجت تعديلًا أو إلغاءً، راسلنا مع رقم الحجز.</p>
+      <a class="btn" href="/book">حجز خدمة أخرى</a>
+    </div>`;
+  $('#foot').textContent = '';
+}
+
+load();
+</script>
+</body>
+</html>

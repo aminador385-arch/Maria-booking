@@ -1,0 +1,40 @@
+# ═══ ماريا — نشر مجاني على Render (بلا بطاقة، بلا نطاق، HTTPS تلقائي) ═══
+services:
+  - type: web
+    name: maria-booking
+    runtime: node
+    plan: free
+    region: frankfurt
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/ready
+    envVars:
+      - key: NODE_VERSION
+        value: "22.11.0"
+      - key: MARIA_MODE
+        value: mock
+      - key: PAYMENT_PROVIDER
+        value: sandbox
+      - key: MARIA_AUTO_APPROVE
+        value: "false"
+      - key: BOOKING_MODE
+        value: request
+      - key: REQUEST_TTL_HOURS
+        value: "48"
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: DZD_PER_USD
+        value: "135"
+      # يُملأ من لوحة Render (قاعدة بيانات Neon المجانية)
+      - key: DATABASE_URL
+        sync: false
+      # يُولّده Render تلقائيًا
+      - key: MAIL_PROVIDER
+        value: console
+      - key: MAIL_API_KEY
+        sync: false
+      - key: MARIA_ADMIN_TOKEN
+        generateValue: true
+      - key: MARIA_LEGAL_NAME
+        value: مؤسسة ماريا للخدمات الرقمية

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تتبّع طلب الحجز — ماريا</title>
+<style>
+  :root{--bg:#070b14;--card:#0e1626;--line:#1c2942;--ink:#eaf0ff;--muted:#8a97b4;--mint:#39e6c3;--gold:#ffc75a;--pink:#ff6fa5;--blue:#6d8bff}
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1100px 600px at 80% -10%,#12203a 0%,var(--bg) 60%);color:var(--ink);
+       font-family:'Segoe UI',Tahoma,system-ui,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px}
+  .wrap{width:100%;max-width:620px}
+  .brand{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:20px}
+  .logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--mint),var(--blue));
+        display:grid;place-items:center;font-weight:900;color:#04121a;font-size:20px}
+  .brand b{font-size:19px;letter-spacing:.5px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 24px 60px rgba(0,0,0,.45)}
+  h1{font-size:17px;margin:0 0 4px}
+  p.sub{color:var(--muted);font-size:13px;margin:0 0 18px}
+  label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px;font-weight:700}
+  input{width:100%;background:#0a1322;border:1px solid var(--line);border-radius:11px;padding:12px;color:var(--ink);
+        font-size:15px;font-family:inherit;text-align:center;letter-spacing:2px;font-weight:800}
+  input:focus{outline:none;border-color:var(--mint)}
+  button{width:100%;margin-top:16px;padding:13px;border:0;border-radius:12px;cursor:pointer;font-family:inherit;
+         font-weight:900;font-size:14.5px;background:linear-gradient(135deg,var(--mint),var(--blue));color:#04121a}
+  button:disabled{opacity:.55;cursor:default}
+  .row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #16223a;font-size:13px}
+  .row span{color:var(--muted)}
+  .row b{text-align:left}
+  .pill{display:inline-block;padding:4px 11px;border-radius:999px;font-size:11.5px;font-weight:900}
+  .p-new{background:rgba(255,199,90,.14);color:var(--gold);border:1px solid rgba(255,199,90,.35)}
+  .p-paid{background:rgba(57,230,195,.18);color:#7bf3dc;border:1px solid rgba(57,230,195,.5)}
+  .p-approved{background:rgba(57,230,195,.14);color:var(--mint);border:1px solid rgba(57,230,195,.35)}
+  .p-rejected,.p-expired,.p-cancelled{background:rgba(255,111,165,.13);color:var(--pink);border:1px solid rgba(255,111,165,.32)}
+  .big{text-align:center;padding:8px 0 14px}
+  .big .icon{font-size:34px}
+  .big b{display:block;font-size:16px;margin-top:6px}
+  .big p{color:var(--muted);font-size:12.5px;margin:6px 0 0;line-height:1.7}
+  .code{font-family:monospace;font-size:19px;letter-spacing:3px;font-weight:900;color:var(--mint);
+        text-align:center;background:#0a1322;border:1px dashed var(--line);border-radius:12px;padding:11px;margin:14px 0}
+  .note{background:#0a1322;border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:12.5px;color:#a9b6d0;margin-top:14px;line-height:1.7}
+  .act{display:flex;gap:9px;margin-top:14px}
+  .act button{margin:0;font-size:13px;padding:11px}
+  .ghost{background:transparent;border:1px solid var(--line);color:var(--muted)}
+  .steps{margin:16px 0 0;padding:0;list-style:none}
+  .steps li{display:flex;gap:10px;font-size:12.5px;color:var(--muted);padding:7px 0}
+  .steps li b{color:var(--ink)}
+  .steps .dot{width:20px;height:20px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:10px;flex:0 0 20px}
+  .steps .done .dot{background:rgba(57,230,195,.16);border-color:var(--mint);color:var(--mint)}
+  .err{color:var(--pink);font-size:12.5px;margin-top:12px;text-align:center;min-height:16px}
+  .foot{text-align:center;color:#5b6780;font-size:11px;margin-top:16px;line-height:1.8}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><div class="logo">M</div><b>ماريا</b></div>
+
+  <div class="card" id="app">
+    <h1>تتبّع طلب الحجز</h1>
+    <p class="sub">أدخل رقم الطلب الذي وصلك في البريد (مثال: RQ-7K4M2X)</p>
+    <label>رقم الطلب</label>
+    <input id="code" placeholder="RQ-XXXXXX" autocomplete="off" spellcheck="false">
+    <button id="go">اعرض الطلب</button>
+    <div class="err" id="err"></div>
+    <div class="note">لا تدفع أي مبلغ قبل أن يصلك بريد «طلبك جاهز للدفع». الطلب وحده لا يُلزمك بشيء.</div>
+  </div>
+</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const LABEL = { new: 'قيد المراجعة', approved: 'معتمد — بانتظار الدفع', paid: 'مدفوع — مؤكَّد', rejected: 'لم يُؤكَّد', expired: 'انتهت المدة', cancelled: 'ملغى' };
+const ICON = { new: '⏳', approved: '✅', paid: '🎉', rejected: '❌', expired: '⌛', cancelled: '🚫' };
+const HEAD = {
+  new: 'طلبك قيد المراجعة',
+  approved: 'طلبك جاهز — أكمل الدفع',
+  paid: 'تم الدفع — حجزك مؤكَّد',
+  rejected: 'لم نتمكّن من تأكيد طلبك',
+  expired: 'انتهت مدة الطلب',
+  cancelled: 'أُلغي هذا الطلب',
+};
+const TEXT = {
+  new: 'نتحقّق من التوفّر والسعر النهائي. لا تدفع شيئًا الآن — سنراسلك على بريدك.',
+  approved: 'استقرّ السعر وحُجز مقعدك باسمك. أكمل الدفع لتثبيت الحجز.',
+  paid: 'شكرًا لك! أرسلنا التأكيد والفاتورة إلى بريدك.',
+  rejected: 'لم تدفع أي مبلغ، ولا التزام عليك.',
+  expired: 'لم يُبتّ في الطلب خلال المدة المحدّدة. أعد الطلب وسنجيبك أسرع.',
+  cancelled: 'هذا الطلب لم يعد نشطًا.',
+};
+
+function money(v, cur) { return (Number(v) || 0).toLocaleString('en-US', { maximumFractionDigits: 2 }) + ' ' + (cur || 'USD'); }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+async function load(code) {
+  $('#err').textContent = '';
+  if (!/^RQ-[A-Z0-9]{4,8}$/i.test(code.trim())) { $('#err').textContent = 'صيغة الرقم: RQ- ثم 6 حروف/أرقام'; return; }
+  $('#go').disabled = true;
+  try {
+    const r = await fetch('/api/requests/' + encodeURIComponent(code.trim().toUpperCase()));
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'رقم غير موجود');
+    render(d.request);
+    history.replaceState(null, '', '/request?code=' + d.request.code);
+  } catch (e) {
+    $('#err').textContent = e.message;
+  } finally { $('#go').disabled = false; }
+}
+
+function render(q) {
+  const payUrl = q.payUrl || ('/pay?booking=' + (q.bookingId || ''));
+  $('#app').innerHTML = `
+    <div class="big">
+      <div class="icon">${ICON[q.status] || '•'}</div>
+      <b>${HEAD[q.status] || q.status}</b>
+      <p>${TEXT[q.status] || ''}</p>
+    </div>
+    <div class="code">${esc(q.code)}</div>
+    <div class="row"><span>الحالة</span><b><span class="pill p-${q.status}">${LABEL[q.status] || q.status}</span></b></div>
+    <div class="row"><span>القطاع</span><b>${esc(q.verticalName)}</b></div>
+    <div class="row"><span>الخدمة</span><b>${esc(q.offer?.title)}</b></div>
+    <div class="row"><span>التاريخ</span><b>${new Date(q.createdAt).toLocaleString('ar-DZ')}</b></div>
+    ${q.adminNote ? `<div class="note">📝 ${esc(q.adminNote)}</div>` : ''}
+    ${q.status === 'approved' ? `<button onclick="location.href='${payUrl}'">ادفع الآن لتثبيت الحجز</button>` : ''}
+    ${q.status === 'new' ? `<ul class="steps">
+      <li class="done"><span class="dot">✓</span><span><b>الطلب وصلنا</b></span></li>
+      <li><span class="dot">2</span><span>نتحقّق من التوفّر</span></li>
+      <li><span class="dot">3</span><span>نراسلك للدفع</span></li>
+    </ul>` : ''}
+    ${q.status === 'paid' ? `<div class="note">✓ الدفع مكتمل — رقم الحجز <b style="font-family:monospace">${esc(String(q.bookingId||'').slice(-10))}</b></div>` : ''}
+    ${['new','approved'].includes(q.status) ? `<div class="act">
+      <button class="ghost" onclick="lookup()">طلب آخر</button>
+      <button class="ghost" onclick="cancelReq('${esc(q.code)}')">إلغاء الطلب</button>
+    </div>` : `<div class="act"><button class="ghost" onclick="lookup()">طلب آخر</button>
+      <button onclick="location.href='/book'">ابحث عن عرض جديد</button></div>`}
+  `;
+}
+
+function lookup() {
+  $('#app').innerHTML = `<h1>تتبّع طلب الحجز</h1>
+    <p class="sub">أدخل رقم الطلب الذي وصلك في البريد</p>
+    <label>رقم الطلب</label>
+    <input id="code" placeholder="RQ-XXXXXX" autocomplete="off" spellcheck="false">
+    <button id="go">اعرض الطلب</button>
+    <div class="err" id="err"></div>`;
+  bind();
+}
+
+async function cancelReq(code) {
+  if (!confirm('إلغاء الطلب ' + code + '؟')) return;
+  const r = await fetch('/api/requests/' + code + '/cancel', { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
+  const d = await r.json();
+  if (!r.ok) return alert(d.error || 'تعذّر الإلغاء');
+  render(d.request);
+}
+
+function bind() {
+  $('#go').onclick = () => load($('#code').value);
+  $('#code').addEventListener('keydown', e => { if (e.key === 'Enter') load($('#code').value); });
+}
+
+bind();
+const qs = new URLSearchParams(location.search).get('code');
+if (qs) { $('#code').value = qs; load(qs); }
+</script>
+</body>
+</html>
